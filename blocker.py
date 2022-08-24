@@ -3,5 +3,5 @@ def blocked_IPS():
     for line in open('C:/Windows/System32/drivers/etc/hosts'):
         if ("#" not in line and not line.isspace()):
             split_ip = line.split()
-            blocked_ip[split_ip[0]] = split_ip[1]
+            blocked_ip[split_ip[1]] = split_ip[0]
     return blocked_ip

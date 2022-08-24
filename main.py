@@ -1,4 +1,4 @@
-import blocker
+import UserInterface
+from PyQt5 import QtWidgets
+import sys
 
-blocked = blocker.blocked_IPS()
-print(blocked)
