@@ -1,37 +1,42 @@
 import blocker
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QWidget, QApplication, QGridLayout
 import sys
+from PyQt5.uic import loadUi
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QStackedWidget
 
 
 
 
-class Window(QWidget):
+class BlockedSitesWindow(QDialog):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Distraction Blocker")
-        self.setGeometry(0, 0, 400, 400)
-        self.initUI()
+        loadUi("blockedhistory.ui", self)
+        self.tableWidget.setColumnWidth(0, 385)
+        self.tableWidget.setColumnWidth(1, 385)
+        self.loaditems()
+    def loaditems(self):
+        blocked_sites = blocker.blocked_IPS()
+        row=0
+        self.tableWidget.setRowCount(len(blocked_sites))
 
-    def initUI(self):
-        self.history_btn = QtWidgets.QPushButton(self)
-        self.history_btn.setText("Blocked Websites")
-        self.history_btn.clicked.connect(self.click_blocked)
-
-    def click_blocked(self):
-        self.update()
-
-    def update(self):
-        self.label.adjustSize()
+        for site, ip in blocked_sites.items():
+            self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(site))
+            self.tableWidget.setItem(row, 1, QtWidgets.QTableWidgetItem(ip))
+            row += 1
 
 
 
 def start():
     app = QApplication(sys.argv)
-    UI = Window()
-    UI.show()
-    sys.exit(app.exec_())
-
-start()
+    win = BlockedSitesWindow()
+    widget = QStackedWidget()
+    widget.addWidget(win)
+    widget.setFixedHeight(500)
+    widget.setFixedWidth(800)
+    widget.show()
+    try:
+        sys.exit(app.exec_())
+    except:
+        print("exiting")
 
 
