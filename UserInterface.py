@@ -5,14 +5,26 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QStackedWidget
 
 
+class HomeWindow(QDialog):
+    def __init__(self, widget):
+        super().__init__()
+        self.widget = widget
+        loadUi("ui/home.ui", self)
+        self.btn_blockedHistory.clicked.connect(self.goBlockedWindow)
+
+    def goBlockedWindow(self):
+        blocked_sites_win = BlockedSitesWindow(self.widget)
+        self.widget.addWidget(blocked_sites_win)
+        self.widget.setCurrentIndex(self.widget.currentIndex()+1)
 
 
 class BlockedSitesWindow(QDialog):
-    def __init__(self):
+    def __init__(self, widget):
+        self.widget = widget
         super().__init__()
-        loadUi("blockedhistory.ui", self)
-        self.tableWidget.setColumnWidth(0, 385)
-        self.tableWidget.setColumnWidth(1, 385)
+        loadUi("ui/blockedhistory.ui", self)
+        self.tableWidget.setColumnWidth(0, 319)
+        self.tableWidget.setColumnWidth(1, 319)
         self.loaditems()
     def loaditems(self):
         blocked_sites = blocker.blocked_IPS()
@@ -28,8 +40,8 @@ class BlockedSitesWindow(QDialog):
 
 def start():
     app = QApplication(sys.argv)
-    win = BlockedSitesWindow()
     widget = QStackedWidget()
+    win = HomeWindow(widget)
     widget.addWidget(win)
     widget.setFixedHeight(500)
     widget.setFixedWidth(800)
