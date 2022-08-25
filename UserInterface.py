@@ -53,7 +53,11 @@ class BlockedSitesWindow(QDialog):
 
     def removeItem(self):
         if self.tableWidget.rowCount() > 0:
+            hostname = self.tableWidget.item(self.tableWidget.currentRow(), 0).text()
+            blocker.delete_block(hostname)
             self.tableWidget.removeRow(self.tableWidget.currentRow())
+
+
 
     def goHomeWindow(self):
         win = HomeWindow()
