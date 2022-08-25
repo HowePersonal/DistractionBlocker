@@ -31,7 +31,7 @@ font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
 border-bottom: 2px solid white;</string>
    </property>
    <property name="text">
-    <string>Blocked History</string>
+    <string>Blocker</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btn_home">
