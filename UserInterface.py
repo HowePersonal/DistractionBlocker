@@ -2,7 +2,7 @@ import blocker
 import sys
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialog, QApplication, QStackedWidget
+from PyQt5.QtWidgets import QDialog, QApplication, QStackedWidget, QTableWidgetItem
 
 
 class HomeWindow(QDialog):
@@ -38,6 +38,7 @@ class BlockedSitesWindow(QDialog):
         self.btn_add.clicked.connect(self.addItem)
         self.btn_delete.clicked.connect(self.removeItem)
 
+
     def loaditems(self):
         blocked_sites = blocker.blocked_IPS()
         row=0
@@ -49,7 +50,15 @@ class BlockedSitesWindow(QDialog):
 
 
     def addItem(self):
-        self.tableWidget.insertRow(self.tableWidget.rowCount())
+        value = self.blockSiteTextBox.toPlainText()
+        if value:
+            self.tableWidget.insertRow(self.tableWidget.rowCount())
+            self.tableWidget.setItem(self.tableWidget.rowCount()-1, 0, QTableWidgetItem(value))
+            blocker.add_block(value)
+        else:
+            print("Enter non-empty address")
+
+        self.blockSiteTextBox.clear()
 
     def removeItem(self):
         if self.tableWidget.rowCount() > 0:

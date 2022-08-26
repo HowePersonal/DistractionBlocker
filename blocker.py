@@ -18,5 +18,12 @@ def delete_block(hostname):
 
 def add_block(hostname):
     with open('C:/Windows/System32/drivers/etc/hosts', 'a') as file:
-        file.write("0.0.0.0" + "           " + hostname + "\n")
+        if "www." in hostname:
+            file.write("0.0.0.0" + "    " + hostname[3:] + "\n")
+            file.write("0.0.0.0" + "    " + hostname + "\n")
+        elif "www." not in hostname:
+            file.write("0.0.0.0" + "    " + hostname + "\n")
+            file.write("0.0.0.0" + "    " + "www." + hostname + "\n")
+        file.write("::1     " + hostname)
+
 
