@@ -1,4 +1,11 @@
 import UserInterface
+import os
 
-UserInterface.start()
+def startProgram():
+    choiceStart = input("Warning - shutting down all web browsers, Y/N")
+    if choiceStart == 'Y':
+        os.system("taskkill /im msedge.exe /f")
+        UserInterface.start()
+
+startProgram()
 

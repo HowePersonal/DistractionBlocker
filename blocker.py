@@ -24,6 +24,6 @@ def add_block(hostname):
         elif "www." not in hostname:
             file.write("0.0.0.0" + "    " + hostname + "\n")
             file.write("0.0.0.0" + "    " + "www." + hostname + "\n")
-        file.write("::1     " + hostname)
+        file.write("::1     " + hostname + "\n")
 
 
