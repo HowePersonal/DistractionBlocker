@@ -4,6 +4,27 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QApplication, QStackedWidget, QTableWidgetItem
 
+class alertPopup(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        loadUi("ui/alertPopup.ui", self)
+        self.btn_alert.accepted.connect(self.alertAccept)
+        self.btn_alert.rejected.connect(self.alertRejected)
+
+    def alertAccept(self):
+        self.close()
+        start()
+
+    def alertRejected(self):
+        self.close()
+
+
+
+
+
 
 class HomeWindow(QDialog):
     def __init__(self):
@@ -79,11 +100,18 @@ class BlockedSitesWindow(QDialog):
 
 
 
-
-def start():
-    app = QApplication(sys.argv)
+def confirmStart():
     global widget
     widget = QStackedWidget()
+    alertWin = alertPopup()
+    alertWin.show()
+    try:
+        sys.exit(app.exec_())
+    except:
+        print("exiting")
+
+def start():
+    blocker.close_browsers()
 
     homeWin = HomeWindow()
     widget.addWidget(homeWin)
@@ -95,4 +123,4 @@ def start():
     except:
         print("exiting")
 
-
+app = QApplication(sys.argv)
