@@ -130,18 +130,18 @@ border: 1px solid black;</string>
     <string>DELETE</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="blockSiteTextBox">
+  <widget class="QLineEdit" name="blockSiteTextBox">
    <property name="geometry">
     <rect>
      <x>160</x>
      <y>410</y>
-     <width>631</width>
+     <width>621</width>
      <height>31</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">color: white;
-font: 75 8pt &quot;MS Shell Dlg 2&quot;;</string>
+</string>
    </property>
   </widget>
  </widget>

@@ -4,6 +4,9 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QApplication, QStackedWidget, QTableWidgetItem
 
+
+
+
 class alertPopup(QDialog):
     def __init__(self):
         super().__init__()
@@ -24,8 +27,6 @@ class alertPopup(QDialog):
 
 
 
-
-
 class HomeWindow(QDialog):
     def __init__(self):
         super().__init__()
@@ -34,8 +35,6 @@ class HomeWindow(QDialog):
     def initUI(self):
         loadUi("ui/home.ui", self)
         self.btn_blockedHistory.clicked.connect(self.goBlockedWindow)
-
-
 
     def goBlockedWindow(self):
         win = BlockedSitesWindow()
@@ -57,8 +56,8 @@ class BlockedSitesWindow(QDialog):
         self.loaditems()
         self.btn_home.clicked.connect(self.goHomeWindow)
         self.btn_add.clicked.connect(self.addItem)
+        self.blockSiteTextBox.returnPressed.connect(self.addItem)
         self.btn_delete.clicked.connect(self.removeItem)
-
 
     def loaditems(self):
         blocked_sites = blocker.blocked_IPS()
@@ -69,9 +68,8 @@ class BlockedSitesWindow(QDialog):
             self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(site))
             row += 1
 
-
     def addItem(self):
-        value = self.blockSiteTextBox.toPlainText()
+        value = self.blockSiteTextBox.text()
         if value:
             self.tableWidget.insertRow(self.tableWidget.rowCount())
             self.tableWidget.setItem(self.tableWidget.rowCount()-1, 0, QTableWidgetItem(value))
@@ -87,8 +85,6 @@ class BlockedSitesWindow(QDialog):
             blocker.delete_block(hostname)
             self.tableWidget.removeRow(self.tableWidget.currentRow())
 
-
-
     def goHomeWindow(self):
         win = HomeWindow()
         widget.addWidget(win)
@@ -97,10 +93,7 @@ class BlockedSitesWindow(QDialog):
 
 
 
-
-
-
-def confirmStart():
+def confirm_start():
     global widget
     widget = QStackedWidget()
     alertWin = alertPopup()
@@ -109,6 +102,10 @@ def confirmStart():
         sys.exit(app.exec_())
     except:
         print("exiting")
+
+
+
+
 
 def start():
     blocker.close_browsers()

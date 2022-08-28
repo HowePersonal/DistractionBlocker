@@ -1,5 +1,4 @@
 import UserInterface
-import os
 
-UserInterface.confirmStart()
+UserInterface.confirm_start()
 
