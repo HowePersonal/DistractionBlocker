@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>800</height>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@ font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
 border-bottom: 2px solid white;</string>
    </property>
    <property name="text">
-    <string>Blocker</string>
+    <string>Blocked Sites</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btn_home">
@@ -50,6 +50,42 @@ border-bottom: 2px solid white;</string>
    </property>
    <property name="text">
     <string>Home</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_scheduleBlocks">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>126</y>
+     <width>151</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;
+font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
+border-bottom: 2px solid white;</string>
+   </property>
+   <property name="text">
+    <string>Schedule Blocks</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_blockedApps">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>84</y>
+     <width>151</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;
+font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
+border-bottom: 2px solid white;</string>
+   </property>
+   <property name="text">
+    <string>Blocked Apps</string>
    </property>
   </widget>
  </widget>
