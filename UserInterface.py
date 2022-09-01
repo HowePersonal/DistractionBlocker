@@ -64,7 +64,6 @@ class BlockedSitesWindow(QDialog):
     def init_ui(self):
         loadUi("ui/blockedweb.ui", self)
         self.tableWidget.verticalHeader().setVisible(False)
-        self.tableWidget.setColumnWidth(0, 638)
         self.load_items()
 
         #transition windows
@@ -118,7 +117,6 @@ class BlockedAppsWindow(QDialog):
     def init_ui(self):
         loadUi("ui/blockedapps.ui", self)
         self.tableWidget.verticalHeader().setVisible(False)
-        self.tableWidget.setColumnWidth(0, 638)
 
         self.load_items()
 
@@ -175,7 +173,7 @@ def confirm_start():
 
 
 
-def createWindows():
+def create_windows():
     homeWin = HomeWindow()
     widget.addWidget(homeWin)
 
@@ -188,7 +186,7 @@ def createWindows():
 
 def start_program():
     blockerwebsite.close_browsers()
-    createWindows()
+    create_windows()
 
     widget.resize(800, 500)
     widget.show()
