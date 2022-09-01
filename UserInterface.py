@@ -1,12 +1,16 @@
+import blocker
 import blockerwebsite
 import blockerapplication
 import sys
 from PyQt5.uic import loadUi
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QDialog, QApplication, QStackedWidget, QTableWidgetItem, QFileDialog
+from PyQt5.QtCore import QThread
 
 
-
+class Worker(QThread):
+    def run(self):
+        blocker.start_appblock()
 
 class alertPopup(QDialog):
     def __init__(self):
@@ -20,7 +24,10 @@ class alertPopup(QDialog):
 
     def alertAccept(self):
         self.close()
+        self.worker = Worker()
+        self.worker.start()
         start()
+
 
     def alertRejected(self):
         self.close()
@@ -190,4 +197,6 @@ def start():
     except:
         print("exiting")
 
+
 app = QApplication(sys.argv)
+

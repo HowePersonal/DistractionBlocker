@@ -1,4 +1,10 @@
 import UserInterface
+import blockerapplication
+import multiprocessing
 
-UserInterface.confirm_start()
+
+
+if __name__ == '__main__':
+    UserInterface.confirm_start()
+
 
