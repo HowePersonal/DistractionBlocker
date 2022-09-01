@@ -1,6 +1,3 @@
-import os
-import time
-
 def read_file():
     with open('blockerfiles/blockedapplications', 'r') as file:
         lines = file.readlines()

@@ -12,24 +12,26 @@ class Worker(QThread):
     def run(self):
         blocker.start_appblock()
 
+
+
+
 class alertPopup(QDialog):
     def __init__(self):
         super().__init__()
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
         loadUi("ui/alertPopup.ui", self)
-        self.btn_alert.accepted.connect(self.alertAccept)
-        self.btn_alert.rejected.connect(self.alertRejected)
+        self.btn_alert.accepted.connect(self.alert_accept)
+        self.btn_alert.rejected.connect(self.alert_rejected)
 
-    def alertAccept(self):
+    def alert_accept(self):
         self.close()
         self.worker = Worker()
         self.worker.start()
-        start()
+        start_program()
 
-
-    def alertRejected(self):
+    def alert_rejected(self):
         self.close()
 
 
@@ -38,43 +40,42 @@ class alertPopup(QDialog):
 class HomeWindow(QDialog):
     def __init__(self):
         super().__init__()
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
         loadUi("ui/home.ui", self)
 
         # transition windows
-        self.btn_blockedHistory.clicked.connect(self.goBlockedWebWindow)
-        self.btn_blockedApps.clicked.connect(self.goBlockedAppWindow)
+        self.btn_blockedWeb.clicked.connect(self.go_web_win)
+        self.btn_blockedApps.clicked.connect(self.go_app_win)
 
-    def goBlockedWebWindow(self):
+    def go_web_win(self):
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
-
-    def goBlockedAppWindow(self):
+    def go_app_win(self):
         widget.setCurrentIndex(widget.currentIndex() + 2)
 
 
 class BlockedSitesWindow(QDialog):
     def __init__(self):
         super().__init__()
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
-        loadUi("ui/blockedhistory.ui", self)
+    def init_ui(self):
+        loadUi("ui/blockedweb.ui", self)
         self.tableWidget.verticalHeader().setVisible(False)
         self.tableWidget.setColumnWidth(0, 638)
-        self.loaditems()
+        self.load_items()
 
         #transition windows
-        self.btn_home.clicked.connect(self.goHomeWindow)
-        self.btn_blockedApps.clicked.connect(self.goBlockedAppWindow)
+        self.btn_home.clicked.connect(self.go_home_win)
+        self.btn_blockedApps.clicked.connect(self.go_app_win)
 
-        self.btn_add.clicked.connect(self.addItem)
-        self.blockSiteTextBox.returnPressed.connect(self.addItem)
-        self.btn_delete.clicked.connect(self.removeItem)
+        self.btn_add.clicked.connect(self.add_item)
+        self.blockSiteTextBox.returnPressed.connect(self.add_item)
+        self.btn_delete.clicked.connect(self.remove_item)
 
-    def loaditems(self):
+    def load_items(self):
         blocked_sites = blockerwebsite.blocked_IPS()
         row=0
         self.tableWidget.setRowCount(len(blocked_sites))
@@ -83,7 +84,7 @@ class BlockedSitesWindow(QDialog):
             self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(site))
             row += 1
 
-    def addItem(self):
+    def add_item(self):
         value = self.blockSiteTextBox.text()
         if value:
             self.tableWidget.insertRow(self.tableWidget.rowCount())
@@ -94,41 +95,41 @@ class BlockedSitesWindow(QDialog):
 
         self.blockSiteTextBox.clear()
 
-    def removeItem(self):
+    def remove_item(self):
         if self.tableWidget.rowCount() > 0:
             hostname = self.tableWidget.item(self.tableWidget.currentRow(), 0).text()
             blockerwebsite.delete_block(hostname)
             self.tableWidget.removeRow(self.tableWidget.currentRow())
 
-    def goHomeWindow(self):
+    def go_home_win(self):
         widget.setCurrentIndex(widget.currentIndex()-1)
 
-    def goBlockedAppWindow(self):
+    def go_app_win(self):
         widget.setCurrentIndex(widget.currentIndex()+1)
+
+
 
 
 class BlockedAppsWindow(QDialog):
     def __init__(self):
         super().__init__()
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
         loadUi("ui/blockedapps.ui", self)
         self.tableWidget.verticalHeader().setVisible(False)
         self.tableWidget.setColumnWidth(0, 638)
 
-        self.loaditems()
+        self.load_items()
 
-        self.btn_addApp.clicked.connect(self.addItem)
-        self.btn_deleteApp.clicked.connect(self.removeItem)
+        self.btn_addApp.clicked.connect(self.add_item)
+        self.btn_deleteApp.clicked.connect(self.remove_item)
 
         # transition windows
-        self.btn_home.clicked.connect(self.goHomeWindow)
-        self.btn_blockedHistory.clicked.connect(self.goBlockedWebWindow)
+        self.btn_home.clicked.connect(self.go_home_win)
+        self.btn_blockedWeb.clicked.connect(self.go_web_win)
 
-
-
-    def loaditems(self):
+    def load_items(self):
         blocked_sites = blockerapplication.blocked_APPS()
         row=0
         self.tableWidget.setRowCount(len(blocked_sites))
@@ -137,8 +138,7 @@ class BlockedAppsWindow(QDialog):
             self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(site))
             row += 1
 
-
-    def addItem(self):
+    def add_item(self):
         application_name = QFileDialog.getOpenFileName(self, "Open File", "C:/", "All Files (*)")
         appname = application_name[0].split("/")[-1]
 
@@ -146,17 +146,17 @@ class BlockedAppsWindow(QDialog):
         self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 0, QTableWidgetItem(appname))
         blockerapplication.add_block(appname)
 
-    def removeItem(self):
+    def remove_item(self):
         if self.tableWidget.rowCount() > 0:
             appname = self.tableWidget.item(self.tableWidget.currentRow(), 0).text()
             blockerapplication.delete_block(appname)
             self.tableWidget.removeRow(self.tableWidget.currentRow())
 
 
-    def goBlockedWebWindow(self):
+    def go_web_win(self):
         widget.setCurrentIndex(widget.currentIndex()-1)
 
-    def goHomeWindow(self):
+    def go_home_win(self):
         widget.setCurrentIndex(widget.currentIndex()-2)
 
 
@@ -186,7 +186,7 @@ def createWindows():
     widget.addWidget(blockedAppsWin)
 
 
-def start():
+def start_program():
     blockerwebsite.close_browsers()
     createWindows()
 

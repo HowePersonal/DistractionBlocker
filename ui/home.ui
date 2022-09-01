@@ -11,12 +11,12 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Distraction Blocker</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color:rgb(61,61,61);</string>
   </property>
-  <widget class="QPushButton" name="btn_blockedHistory">
+  <widget class="QPushButton" name="btn_blockedWeb">
    <property name="geometry">
     <rect>
      <x>0</x>
