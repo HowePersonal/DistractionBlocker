@@ -149,7 +149,7 @@ class BlockedAppsWindow(QDialog):
     def removeItem(self):
         if self.tableWidget.rowCount() > 0:
             appname = self.tableWidget.item(self.tableWidget.currentRow(), 0).text()
-            blockerwebsite.delete_block(appname)
+            blockerapplication.delete_block(appname)
             self.tableWidget.removeRow(self.tableWidget.currentRow())
 
 
