@@ -1,6 +1,7 @@
 import blocker
 import blockerwebsite
 import blockerapplication
+import localserver
 import sys
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtCore
@@ -8,9 +9,13 @@ from PyQt5.QtWidgets import QDialog, QApplication, QStackedWidget, QTableWidgetI
 from PyQt5.QtCore import QThread
 
 
-class Worker(QThread):
+class Worker1(QThread):
     def run(self):
         blocker.start_appblock()
+
+class Worker2(QThread):
+    def run(self):
+        localserver.start()
 
 
 
@@ -27,8 +32,12 @@ class alertPopup(QDialog):
 
     def alert_accept(self):
         self.close()
-        self.worker = Worker()
-        self.worker.start()
+        self.worker1 = Worker1()
+        self.worker1.start()
+
+        self.worker2 = Worker2()
+        self.worker2.start()
+
         start_program()
 
     def alert_rejected(self):
@@ -48,12 +57,16 @@ class HomeWindow(QDialog):
         # transition windows
         self.btn_blockedWeb.clicked.connect(self.go_web_win)
         self.btn_blockedApps.clicked.connect(self.go_app_win)
+        self.btn_scheduleBlocks.clicked.connect(self.go_schedule_win)
 
     def go_web_win(self):
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
     def go_app_win(self):
         widget.setCurrentIndex(widget.currentIndex() + 2)
+
+    def go_schedule_win(self):
+        widget.setCurrentIndex(widget.currentIndex() + 3)
 
 
 class BlockedSitesWindow(QDialog):
@@ -66,20 +79,21 @@ class BlockedSitesWindow(QDialog):
         self.tableWidget.verticalHeader().setVisible(False)
         self.load_items()
 
-        #transition windows
-        self.btn_home.clicked.connect(self.go_home_win)
-        self.btn_blockedApps.clicked.connect(self.go_app_win)
-
         self.btn_add.clicked.connect(self.add_item)
         self.blockSiteTextBox.returnPressed.connect(self.add_item)
         self.btn_delete.clicked.connect(self.remove_item)
 
+        #transition windows
+        self.btn_home.clicked.connect(self.go_home_win)
+        self.btn_blockedApps.clicked.connect(self.go_app_win)
+        self.btn_scheduleBlocks.clicked.connect(self.go_schedule_win)
+
     def load_items(self):
-        blocked_sites = blockerwebsite.blocked_IPS()
+        blocked_sites = blockerwebsite.blocked_WEB()
         row=0
         self.tableWidget.setRowCount(len(blocked_sites))
 
-        for site in blocked_sites.keys():
+        for site in blocked_sites:
             self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(site))
             row += 1
 
@@ -106,6 +120,9 @@ class BlockedSitesWindow(QDialog):
     def go_app_win(self):
         widget.setCurrentIndex(widget.currentIndex()+1)
 
+    def go_schedule_win(self):
+        widget.setCurrentIndex(widget.currentIndex() + 2)
+
 
 
 
@@ -126,6 +143,7 @@ class BlockedAppsWindow(QDialog):
         # transition windows
         self.btn_home.clicked.connect(self.go_home_win)
         self.btn_blockedWeb.clicked.connect(self.go_web_win)
+        self.btn_scheduleBlocks.clicked.connect(self.go_schedule_win)
 
     def load_items(self):
         blocked_sites = blockerapplication.blocked_APPS()
@@ -150,13 +168,39 @@ class BlockedAppsWindow(QDialog):
             blockerapplication.delete_block(appname)
             self.tableWidget.removeRow(self.tableWidget.currentRow())
 
+    def go_home_win(self):
+        widget.setCurrentIndex(widget.currentIndex()-2)
 
     def go_web_win(self):
         widget.setCurrentIndex(widget.currentIndex()-1)
 
-    def go_home_win(self):
-        widget.setCurrentIndex(widget.currentIndex()-2)
+    def go_schedule_win(self):
+        widget.setCurrentIndex(widget.currentIndex() + 1)
 
+
+
+
+class ScheduleBlocksWindow(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.init_ui()
+
+    def init_ui(self):
+        loadUi("ui/scheduleblocks.ui", self)
+
+        #transition windows
+        self.btn_home.clicked.connect(self.go_home_win)
+        self.btn_blockedWeb.clicked.connect(self.go_web_win)
+        self.btn_blockedApps.clicked.connect(self.go_app_win)
+
+    def go_home_win(self):
+        widget.setCurrentIndex(widget.currentIndex() - 3)
+
+    def go_web_win(self):
+        widget.setCurrentIndex(widget.currentIndex() - 2)
+
+    def go_app_win(self):
+        widget.setCurrentIndex(widget.currentIndex() - 1)
 
 
 
@@ -174,18 +218,20 @@ def confirm_start():
 
 
 def create_windows():
-    homeWin = HomeWindow()
-    widget.addWidget(homeWin)
+    home_win = HomeWindow()
+    widget.addWidget(home_win)
 
-    blockedSitesWin = BlockedSitesWindow()
-    widget.addWidget(blockedSitesWin)
+    blocked_sites_win = BlockedSitesWindow()
+    widget.addWidget(blocked_sites_win)
 
-    blockedAppsWin = BlockedAppsWindow()
-    widget.addWidget(blockedAppsWin)
+    blocked_apps_win = BlockedAppsWindow()
+    widget.addWidget(blocked_apps_win)
+
+    schedule_blocks_win = ScheduleBlocksWindow()
+    widget.addWidget(schedule_blocks_win)
 
 
 def start_program():
-    blockerwebsite.close_browsers()
     create_windows()
 
     widget.resize(800, 500)
