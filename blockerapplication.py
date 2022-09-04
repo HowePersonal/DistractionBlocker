@@ -1,5 +1,3 @@
-import localserver
-
 def read_file():
     with open('blockerfiles/blockedapplications', 'r') as file:
         lines = file.readlines()

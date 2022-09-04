@@ -5,7 +5,7 @@ import localserver
 import sys
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QDialog, QApplication, QStackedWidget, QTableWidgetItem, QFileDialog
+from PyQt5.QtWidgets import QDialog, QWidget, QApplication, QStackedWidget, QTableWidgetItem, QFileDialog
 from PyQt5.QtCore import QThread
 
 
@@ -38,7 +38,10 @@ class alertPopup(QDialog):
         self.worker2 = Worker2()
         self.worker2.start()
 
-        start_program()
+        try:
+            start_program()
+        except:
+            pass
 
     def alert_rejected(self):
         self.close()
@@ -91,11 +94,12 @@ class BlockedSitesWindow(QDialog):
     def load_items(self):
         blocked_sites = blockerwebsite.blocked_WEB()
         row=0
-        self.tableWidget.setRowCount(len(blocked_sites))
+        self.tableWidget.setRowCount(len(blocked_sites)/2)
 
         for site in blocked_sites:
-            self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(site))
-            row += 1
+            if site[:4] != 'www.':
+                self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(site))
+                row += 1
 
     def add_item(self):
         value = self.blockSiteTextBox.text()
@@ -193,6 +197,15 @@ class ScheduleBlocksWindow(QDialog):
         self.btn_blockedWeb.clicked.connect(self.go_web_win)
         self.btn_blockedApps.clicked.connect(self.go_app_win)
 
+        #schedule blocks windows
+        self.btn_scheduleMonday.clicked.connect(lambda: self.schedule_block("Monday"))
+        self.btn_scheduleTuesday.clicked.connect(lambda: self.schedule_block("Tuesday"))
+        self.btn_scheduleWednesday.clicked.connect(lambda: self.schedule_block("Wednesday"))
+        self.btn_scheduleThursday.clicked.connect(lambda: self.schedule_block("Thursday"))
+        self.btn_scheduleFriday.clicked.connect(lambda: self.schedule_block("Friday"))
+        self.btn_scheduleSaturday.clicked.connect(lambda: self.schedule_block("Saturday"))
+        self.btn_scheduleSunday.clicked.connect(lambda: self.schedule_block("Sunday"))
+
     def go_home_win(self):
         widget.setCurrentIndex(widget.currentIndex() - 3)
 
@@ -202,6 +215,33 @@ class ScheduleBlocksWindow(QDialog):
     def go_app_win(self):
         widget.setCurrentIndex(widget.currentIndex() - 1)
 
+    def schedule_block(self, day):
+        self.schedule_block_popup = ScheduleBlocksPopupWindow(day)
+        self.schedule_block_popup.show()
+
+
+
+class ScheduleBlocksPopupWindow(QWidget):
+    def __init__(self, day):
+        super().__init__()
+        self.init_ui(day)
+        self.day = day
+
+    def init_ui(self, day):
+        loadUi("ui/scheduleblockspopup.ui", self)
+        self.dayLabel.setText(day)
+
+        #transition window
+        self.btn_apply.clicked.connect(self.apply)
+        self.btn_cancel.clicked.connect(self.cancel)
+
+    def apply(self):
+        blocker.add_block(1, self.day, self.timeFrom.time().toString(), self.timeTo.time().toString())
+        self.close()
+
+    def cancel(self):
+        self.close()
+
 
 
 
@@ -210,10 +250,8 @@ def confirm_start():
     widget = QStackedWidget()
     alertWin = alertPopup()
     alertWin.show()
-    try:
-        sys.exit(app.exec_())
-    except:
-        print("exiting")
+
+    sys.exit(app.exec_())
 
 
 
@@ -236,10 +274,10 @@ def start_program():
 
     widget.resize(800, 500)
     widget.show()
-    try:
-        sys.exit(app.exec_())
-    except:
-        print("exiting")
+    sys.exit(app.exec_())
+
+
+
 
 
 app = QApplication(sys.argv)

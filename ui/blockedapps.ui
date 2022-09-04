@@ -20,7 +20,7 @@
    <string>Distraction Blocker</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color:rgb(61,61,61);</string>
+   <string notr="true">background-color:rgb(24,24,24);</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -156,7 +156,7 @@ border-bottom: 2px solid white;</string>
 }
 
 QHeaderView::section {
-	background-color: rgb(61,61,61);
+	background-color: rgb(24,24,24);
 	color: white;
 }
 

@@ -1,20 +1,14 @@
-from http.server import HTTPServer, BaseHTTPRequestHandler
-import json
+from flask import Flask
+from flask_cors import CORS, cross_origin
+from waitress import serve
 import blockerwebsite
 
+app = Flask(__name__)
+CORS(app, support_credentials=True)
 
-class Handler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('content-type', 'application/json')
-        self.end_headers()
-        data = blockerwebsite.read_file()
-        self.wfile.write(json.dumps(data).encode('utf-8'))
-
-
+@app.route("/")
+def get_blocked_sites():
+    return blockerwebsite.read_file()
 
 def start():
-    PORT = 9000
-    server = HTTPServer(('', PORT), Handler)
-    print('Server running on port ' + str(PORT))
-    server.serve_forever()
+    serve(app, host='127.0.0.1', port=9000)

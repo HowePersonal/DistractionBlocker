@@ -1,4 +1,3 @@
-import pandas
 import json
 
 def read_file():
@@ -14,14 +13,26 @@ def blocked_WEB():
 
 def delete_block(webname):
     data = read_file()
-    data['sites'].remove(webname)
+    if "www." in webname:
+        data['sites'].remove(webname)
+        data['sites'].remove(webname[4:])
+    elif "www." not in webname:
+        data['sites'].remove(webname)
+        data['sites'].remove("www." + webname)
+
     json_data = json.dumps(data)
     with open('blockerfiles/blockedsites.json', 'w') as file:
         file.write(json_data)
 
 def add_block(webname):
     data = read_file()
-    data['sites'].append(webname)
+    if "www." == webname[:4]:
+        data['sites'].append(webname)
+        data['sites'].append(webname[4:])
+    elif "www." != webname[:4]:
+        data['sites'].append(webname)
+        data['sites'].append("www." + webname)
+
     json_data = json.dumps(data)
     with open('blockerfiles/blockedsites.json', 'w') as file:
         file.write(json_data)

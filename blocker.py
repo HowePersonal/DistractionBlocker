@@ -1,7 +1,6 @@
 import blockerapplication
-import json
-import pickle
 import notifypy
+import json
 import time
 import os
 
@@ -17,5 +16,17 @@ def start_appblock():
                 notification.send()
             time.sleep(1)
 
+
+def add_block(listNum, day, start, end):
+    with open('blockerfiles/blocks.json', 'r') as file:
+        data = json.load(file)
+
+    if listNum not in data[day]: data[day][listNum] = []
+    data[day][listNum].append(start)
+    data[day][listNum].append(end)
+
+    json_data = json.dumps(data)
+    with open('blockerfiles/blocks.json', 'w') as file:
+        file.write(json_data)
 
 
