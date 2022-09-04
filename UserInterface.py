@@ -69,14 +69,19 @@ class HomeWindow(QDialog):
         # buttons
         self.startBlockCheckBox.stateChanged.connect(self.start_block)
 
+        # start button initalize
+        self.update_start_button()
+
     def start_block(self):
+        self.update_start_button()
+        with open(config_file, 'w') as write_config:
+            config.write(write_config)
+
+    def update_start_button(self):
         if self.startBlockCheckBox.isChecked():
             config['blocker']['block'] = 'on'
         else:
             config['blocker']['block'] = 'off'
-
-        with open(config_file, 'w') as write_config:
-            config.write(write_config)
 
 
     def go_web_win(self):
