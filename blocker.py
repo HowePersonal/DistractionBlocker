@@ -1,4 +1,4 @@
-from main import config
+from main import config, config_file
 import blockerapplication
 import notifypy
 import json
@@ -16,6 +16,7 @@ def start_appblock():
                 notification.message = f"{item.strip()} is active on the block list"
                 notification.send()
             time.sleep(1)
+        time.sleep(2)
 
 
 def add_block(listNum, day, start, end):

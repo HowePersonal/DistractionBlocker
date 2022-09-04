@@ -1,24 +1,32 @@
 from main import config
+import json
+
 def read_file():
-    with open('blockerfiles/blockedapplications', 'r') as file:
-        lines = file.readlines()
-    return lines
+    with open('blockerfiles/blockedapplications.json', 'r') as file:
+        data = json.load(file)
+    return data
 
 def blocked_APPS():
-    blocked_app = []
-    for line in read_file():
-        blocked_app.append(line.strip())
-    return blocked_app
+    return read_file()
 
 def delete_block(appname):
-    lines = read_file()
-    with open('blockerfiles/blockedapplications', 'w') as file:
-        for line in lines:
-            if appname not in line:
-                file.write(line)
+    data = read_file()
+
+    if appname in data: data.remove(appname)
+
+    json_data = json.dumps(data)
+    with open('blockerfiles/blockedapplications.json', 'w') as file:
+        file.write(json_data)
+
 
 def add_block(appname):
-    with open('blockerfiles/blockedapplications', 'a') as file:
-        file.write(appname+"\n")
+    data = read_file()
+
+    if appname not in data: data.append(appname)
+
+    json_data = json.dumps(data)
+    with open('blockerfiles/blockedapplications.json', 'w') as file:
+        file.write(json_data)
+
 
 

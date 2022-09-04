@@ -7,10 +7,7 @@ def read_file():
     return data
 
 def blocked_WEB():
-    blocked_web = []
-    for line in read_file()["sites"]:
-        blocked_web.append(line.strip())
-    return blocked_web
+    return read_file()["sites"]
 
 def delete_block(webname):
     data = read_file()
