@@ -14,7 +14,7 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color:rgb(24,24,24);</string>
+   <string notr="true">background-color:rgb(33,33,33);</string>
   </property>
   <widget class="QDialogButtonBox" name="btn_alert">
    <property name="geometry">
@@ -27,6 +27,7 @@
    </property>
    <property name="styleSheet">
     <string notr="true">color: white;
+background-color: rgb(24,24,24);
 </string>
    </property>
    <property name="standardButtons">

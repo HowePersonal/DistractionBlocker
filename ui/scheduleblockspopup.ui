@@ -20,7 +20,7 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(24,24,24);</string>
+   <string notr="true">background-color: rgb(33,33,33);</string>
   </property>
   <widget class="QLabel" name="dayLabel">
    <property name="geometry">
@@ -140,7 +140,8 @@ color: white;</string>
    </property>
    <property name="styleSheet">
     <string notr="true">color: white;
-font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(24,24,24);</string>
    </property>
    <property name="text">
     <string>APPLY</string>
@@ -169,7 +170,8 @@ font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
    </property>
    <property name="styleSheet">
     <string notr="true">color: white;
-font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(24,24,24);</string>
    </property>
    <property name="text">
     <string>CANCEL</string>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>820</width>
-    <height>500</height>
+    <height>557</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -20,7 +20,7 @@
    <string>Distraction Blocker</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color:rgb(24,24,24);</string>
+   <string notr="true">background-color:rgb(33,33,33);</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -45,7 +45,8 @@
        <property name="styleSheet">
         <string notr="true">color: white;
 font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
-border-bottom: 2px solid white;</string>
+background-color: rgb(24,24,24);
+</string>
        </property>
        <property name="text">
         <string>Home</string>
@@ -69,7 +70,7 @@ border-bottom: 2px solid white;</string>
        <property name="styleSheet">
         <string notr="true">color: white;
 font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
-border-bottom: 2px solid white;</string>
+background-color: rgb(24,24,24);</string>
        </property>
        <property name="text">
         <string>Blocked Sites</string>
@@ -93,7 +94,7 @@ border-bottom: 2px solid white;</string>
        <property name="styleSheet">
         <string notr="true">color: white;
 font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
-border-bottom: 2px solid white;</string>
+background-color: rgb(24,24,24);</string>
        </property>
        <property name="text">
         <string>Blocked Apps</string>
@@ -117,7 +118,7 @@ border-bottom: 2px solid white;</string>
        <property name="styleSheet">
         <string notr="true">color: white;
 font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
-border-bottom: 2px solid white;</string>
+background-color: rgb(24,24,24);</string>
        </property>
        <property name="text">
         <string>Schedule Blocks</string>
@@ -140,17 +141,116 @@ border-bottom: 2px solid white;</string>
     </layout>
    </item>
    <item row="0" column="1">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+    <widget class="QFrame" name="frame">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="sizeHint" stdset="0">
+     <property name="minimumSize">
       <size>
-       <width>40</width>
-       <height>20</height>
+       <width>640</width>
+       <height>0</height>
       </size>
      </property>
-    </spacer>
+     <property name="styleSheet">
+      <string notr="true">margins: 0;
+background-color: rgb(33,33,33);</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <item row="2" column="1">
+       <widget class="QLabel" name="label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: white;
+font: 17px 10pt &quot;MS Shell Dlg 2&quot;;</string>
+        </property>
+        <property name="text">
+         <string>Start Block</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>450</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="3">
+       <widget class="QCheckBox" name="startBlockCheckBox">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QCheckBox::indicator {
+	width: 50px;
+	height: 50px;
+}</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="0">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

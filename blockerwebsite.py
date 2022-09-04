@@ -1,3 +1,4 @@
+from main import config
 import json
 
 def read_file():

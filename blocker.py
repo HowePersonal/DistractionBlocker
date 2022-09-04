@@ -1,3 +1,4 @@
+from main import config
 import blockerapplication
 import notifypy
 import json

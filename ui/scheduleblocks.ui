@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>820</width>
-    <height>507</height>
+    <height>512</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -20,221 +20,214 @@
    <string>Distraction Blocker</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(24,24,24);</string>
+   <string notr="true">background-color: rgb(33,33,33);</string>
   </property>
-  <widget class="QWidget" name="verticalLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>160</width>
-     <height>491</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <property name="spacing">
-     <number>2</number>
-    </property>
-    <item>
-     <widget class="QPushButton" name="btn_home">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>150</width>
-        <height>40</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: white;
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="btn_home">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: white;
 font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
-border-bottom: 2px solid white;</string>
-      </property>
-      <property name="text">
-       <string>Home</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btn_blockedWeb">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>150</width>
-        <height>40</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: white;
+background-color: rgb(24,24,24);</string>
+       </property>
+       <property name="text">
+        <string>Home</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_blockedWeb">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: white;
 font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
-border-bottom: 2px solid white;</string>
-      </property>
-      <property name="text">
-       <string>Blocked Sites</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btn_blockedApps">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>150</width>
-        <height>40</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: white;
+background-color: rgb(24,24,24);</string>
+       </property>
+       <property name="text">
+        <string>Blocked Sites</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_blockedApps">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: white;
 font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
-border-bottom: 2px solid white;</string>
-      </property>
-      <property name="text">
-       <string>Blocked Apps</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btn_scheduleBlocks">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>150</width>
-        <height>40</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: white;
+background-color: rgb(24,24,24);</string>
+       </property>
+       <property name="text">
+        <string>Blocked Apps</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_scheduleBlocks">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: white;
 font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
-border-bottom: 2px solid white;</string>
-      </property>
-      <property name="text">
-       <string>Schedule Blocks</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>-10</y>
-     <width>641</width>
-     <height>80</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="QPushButton" name="btn_scheduleMonday">
-      <property name="styleSheet">
-       <string notr="true">color: white;
-font: 75 9pt &quot;MS Shell Dlg 2&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Monday</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btn_scheduleTuesday">
-      <property name="styleSheet">
-       <string notr="true">color: white;
-font: 75 9pt &quot;MS Shell Dlg 2&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Tuesday</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btn_scheduleWednesday">
-      <property name="styleSheet">
-       <string notr="true">color: white;
-font: 75 9pt &quot;MS Shell Dlg 2&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Wednesday</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btn_scheduleThursday">
-      <property name="styleSheet">
-       <string notr="true">color: white;
-font: 75 9pt &quot;MS Shell Dlg 2&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Thursday</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btn_scheduleFriday">
-      <property name="styleSheet">
-       <string notr="true">color: white;
-font: 75 9pt &quot;MS Shell Dlg 2&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Friday</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btn_scheduleSaturday">
-      <property name="styleSheet">
-       <string notr="true">color: white;
-font: 75 9pt &quot;MS Shell Dlg 2&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Saturday</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btn_scheduleSunday">
-      <property name="styleSheet">
-       <string notr="true">color: white;
-font: 75 9pt &quot;MS Shell Dlg 2&quot;;</string>
-      </property>
-      <property name="text">
-       <string>Sunday</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+background-color: rgb(24,24,24);</string>
+       </property>
+       <property name="text">
+        <string>Schedule Blocks</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="btn_scheduleMonday">
+       <property name="styleSheet">
+        <string notr="true">color: white;
+font: 75 9pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(24,24,24);</string>
+       </property>
+       <property name="text">
+        <string>Monday</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_scheduleTuesday">
+       <property name="styleSheet">
+        <string notr="true">color: white;
+font: 75 9pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(24,24,24);</string>
+       </property>
+       <property name="text">
+        <string>Tuesday</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_scheduleWednesday">
+       <property name="styleSheet">
+        <string notr="true">color: white;
+font: 75 9pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(24,24,24);</string>
+       </property>
+       <property name="text">
+        <string>Wednesday</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_scheduleThursday">
+       <property name="styleSheet">
+        <string notr="true">color: white;
+font: 75 9pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(24,24,24);</string>
+       </property>
+       <property name="text">
+        <string>Thursday</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_scheduleFriday">
+       <property name="styleSheet">
+        <string notr="true">color: white;
+font: 75 9pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(24,24,24);</string>
+       </property>
+       <property name="text">
+        <string>Friday</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_scheduleSaturday">
+       <property name="styleSheet">
+        <string notr="true">color: white;
+font: 75 9pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(24,24,24);</string>
+       </property>
+       <property name="text">
+        <string>Saturday</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_scheduleSunday">
+       <property name="styleSheet">
+        <string notr="true">color: white;
+font: 75 9pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(24,24,24);</string>
+       </property>
+       <property name="text">
+        <string>Sunday</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

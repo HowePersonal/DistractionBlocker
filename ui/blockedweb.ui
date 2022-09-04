@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>820</width>
-    <height>500</height>
+    <height>533</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -26,7 +26,7 @@
    <string>Distraction Blocker</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(24,24,24);
+   <string notr="true">background-color: rgb(33,33,33);
 </string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -109,7 +109,8 @@ QTableWidget::item {
        <property name="styleSheet">
         <string notr="true">color: white;
 font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
-border-bottom: 2px solid white;</string>
+border-bottom: 2px solid white;
+background-color: rgb(24,24,24);</string>
        </property>
        <property name="text">
         <string>Home</string>
@@ -133,7 +134,8 @@ border-bottom: 2px solid white;</string>
        <property name="styleSheet">
         <string notr="true">color: white;
 font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
-border-bottom: 2px solid white;</string>
+border-bottom: 2px solid white;
+background-color: rgb(24,24,24);</string>
        </property>
        <property name="text">
         <string>Blocked Sites</string>
@@ -157,7 +159,8 @@ border-bottom: 2px solid white;</string>
        <property name="styleSheet">
         <string notr="true">color: white;
 font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
-border-bottom: 2px solid white;</string>
+border-bottom: 2px solid white;
+background-color: rgb(24,24,24);</string>
        </property>
        <property name="text">
         <string>Blocked Apps</string>
@@ -181,7 +184,8 @@ border-bottom: 2px solid white;</string>
        <property name="styleSheet">
         <string notr="true">color: white;
 font: 63 12pt &quot;Cascadia Mono SemiBold&quot;;
-border-bottom: 2px solid white;</string>
+border-bottom: 2px solid white;
+background-color: rgb(24,24,24);</string>
        </property>
        <property name="text">
         <string>Schedule Blocks</string>
@@ -242,7 +246,8 @@ border-bottom: 2px solid white;</string>
        <property name="styleSheet">
         <string notr="true">color: white;
 font: 75 10pt &quot;MS Shell Dlg 2&quot;;
-border: 1px solid black;</string>
+background-color: rgb(24,24,24);
+</string>
        </property>
        <property name="text">
         <string>ADD</string>
@@ -279,7 +284,7 @@ border: 1px solid black;</string>
        <property name="styleSheet">
         <string notr="true">color: white;
 font: 75 10pt &quot;MS Shell Dlg 2&quot;;
-border: 1px solid black;</string>
+background-color: rgb(24,24,24);</string>
        </property>
        <property name="text">
         <string>DELETE</string>

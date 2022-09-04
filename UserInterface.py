@@ -1,3 +1,4 @@
+from main import config, config_file
 import blocker
 import blockerwebsite
 import blockerapplication
@@ -57,10 +58,26 @@ class HomeWindow(QDialog):
     def init_ui(self):
         loadUi("ui/home.ui", self)
 
+        # setting styles
+        self.startBlockCheckBox.setStyleSheet(checkBoxStyle)
+
         # transition windows
         self.btn_blockedWeb.clicked.connect(self.go_web_win)
         self.btn_blockedApps.clicked.connect(self.go_app_win)
         self.btn_scheduleBlocks.clicked.connect(self.go_schedule_win)
+
+        # buttons
+        self.startBlockCheckBox.stateChanged.connect(self.start_block)
+
+    def start_block(self):
+        if self.startBlockCheckBox.isChecked():
+            config['blocker']['block'] = 'on'
+        else:
+            config['blocker']['block'] = 'off'
+
+        with open(config_file, 'w') as write_config:
+            config.write(write_config)
+
 
     def go_web_win(self):
         widget.setCurrentIndex(widget.currentIndex() + 1)
@@ -281,4 +298,20 @@ def start_program():
 
 
 app = QApplication(sys.argv)
+
+checkBoxStyle = """
+    QCheckBox::indicator {
+	    width: 50px;
+	    height: 50px;
+    }
+
+    QCheckBox::indicator::checked {
+	    image: url("ui/iconUI/toggle-on-button.png");
+    }
+
+    QCheckBox::indicator::unchecked {
+	    image: url("ui/iconUI/toggle-off-button.png");
+    }
+    """
+
 
