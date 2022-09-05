@@ -140,32 +140,8 @@ background-color: rgb(24,24,24);</string>
     </layout>
    </item>
    <item row="0" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="btn_scheduleMonday">
-       <property name="styleSheet">
-        <string notr="true">color: white;
-font: 75 9pt &quot;MS Shell Dlg 2&quot;;
-background-color: rgb(24,24,24);</string>
-       </property>
-       <property name="text">
-        <string>Monday</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btn_scheduleTuesday">
-       <property name="styleSheet">
-        <string notr="true">color: white;
-font: 75 9pt &quot;MS Shell Dlg 2&quot;;
-background-color: rgb(24,24,24);</string>
-       </property>
-       <property name="text">
-        <string>Tuesday</string>
-       </property>
-      </widget>
-     </item>
-     <item>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="2">
       <widget class="QPushButton" name="btn_scheduleWednesday">
        <property name="styleSheet">
         <string notr="true">color: white;
@@ -177,19 +153,7 @@ background-color: rgb(24,24,24);</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="btn_scheduleThursday">
-       <property name="styleSheet">
-        <string notr="true">color: white;
-font: 75 9pt &quot;MS Shell Dlg 2&quot;;
-background-color: rgb(24,24,24);</string>
-       </property>
-       <property name="text">
-        <string>Thursday</string>
-       </property>
-      </widget>
-     </item>
-     <item>
+     <item row="0" column="4">
       <widget class="QPushButton" name="btn_scheduleFriday">
        <property name="styleSheet">
         <string notr="true">color: white;
@@ -201,7 +165,43 @@ background-color: rgb(24,24,24);</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="0" column="3">
+      <widget class="QPushButton" name="btn_scheduleThursday">
+       <property name="styleSheet">
+        <string notr="true">color: white;
+font: 75 9pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(24,24,24);</string>
+       </property>
+       <property name="text">
+        <string>Thursday</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="btn_scheduleMonday">
+       <property name="styleSheet">
+        <string notr="true">color: white;
+font: 75 9pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(24,24,24);</string>
+       </property>
+       <property name="text">
+        <string>Monday</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="6">
+      <widget class="QPushButton" name="btn_scheduleSunday">
+       <property name="styleSheet">
+        <string notr="true">color: white;
+font: 75 9pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(24,24,24);</string>
+       </property>
+       <property name="text">
+        <string>Sunday</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
       <widget class="QPushButton" name="btn_scheduleSaturday">
        <property name="styleSheet">
         <string notr="true">color: white;
@@ -213,15 +213,28 @@ background-color: rgb(24,24,24);</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="btn_scheduleSunday">
+     <item row="1" column="0">
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="btn_scheduleTuesday">
        <property name="styleSheet">
         <string notr="true">color: white;
 font: 75 9pt &quot;MS Shell Dlg 2&quot;;
 background-color: rgb(24,24,24);</string>
        </property>
        <property name="text">
-        <string>Sunday</string>
+        <string>Tuesday</string>
        </property>
       </widget>
      </item>

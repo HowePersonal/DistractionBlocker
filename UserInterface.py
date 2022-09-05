@@ -5,14 +5,14 @@ import blockerapplication
 import localserver
 import sys
 from PyQt5.uic import loadUi
-from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QDialog, QWidget, QApplication, QStackedWidget, QTableWidgetItem, QFileDialog
-from PyQt5.QtCore import QThread
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QDialog, QWidget, QApplication, QStackedWidget, QTableWidgetItem, QFileDialog, QTimeEdit, QGroupBox, QFormLayout
+from PyQt5.QtCore import QThread, QTime
 
 
 class Worker1(QThread):
     def run(self):
-        blocker.start_appblock()
+        blocker.start_block()
 
 class Worker2(QThread):
     def run(self):
@@ -246,23 +246,81 @@ class ScheduleBlocksWindow(QDialog):
 class ScheduleBlocksPopupWindow(QWidget):
     def __init__(self, day):
         super().__init__()
-        self.init_ui(day)
         self.day = day
+        self.init_ui(day)
+
 
     def init_ui(self, day):
         loadUi("ui/scheduleblockspopup.ui", self)
         self.dayLabel.setText(day)
+        self.form_layout = QFormLayout()
+        self.group_box = QGroupBox("")
+        self.group_box.setLayout(self.form_layout)
+        self.scrollArea.setWidget(self.group_box)
 
-        #transition window
+
+        # buttons
         self.btn_apply.clicked.connect(self.apply)
         self.btn_cancel.clicked.connect(self.cancel)
+        self.btn_addTime.clicked.connect(self.addTimeWidget)
+        self.btn_deleteTime.clicked.connect(self.deleteTimeWidget)
+
+        self.timeEdits = {}
+        self.loadTimeWidgets()
+
+    def loadTimeWidgets(self):
+        data = blocker.read_blocks()
+        for i, blocks in data[self.day].items():
+            timesFromSplit = blocks[0].split(":")
+            timeFrom = QTime(int(timesFromSplit[0]), int(timesFromSplit[1]), int(timesFromSplit[2]))
+
+            timesToSplit = blocks[1].split(":")
+            timeTo = QTime(int(timesToSplit[0]), int(timesToSplit[1]), int(timesToSplit[2]))
+
+            time_editFrom = TimeEdit(timeFrom)
+            time_editTo = TimeEdit(timeTo)
+
+            self.form_layout.addRow(time_editFrom, time_editTo)
+            self.timeEdits[int(i)] = [time_editFrom, time_editTo]
+        print(self.timeEdits)
+
+    def addTimeWidget(self):
+        row = len(self.timeEdits) + 1
+        time_editFrom = TimeEdit()
+        time_editTo = TimeEdit()
+        self.form_layout.addRow(time_editFrom, time_editTo)
+        self.timeEdits[row] = [time_editFrom, time_editTo]
+        print(row)
+
+    def deleteTimeWidget(self):
+
+        row = len(self.timeEdits)
+
+
+        if row >= 1:
+            self.form_layout.removeRow(row-1)
+            del self.timeEdits[row]
+            try:
+                blocker.remove_block(row, self.day)
+            except:
+                pass
+
 
     def apply(self):
-        blocker.add_block(1, self.day, self.timeFrom.time().toString(), self.timeTo.time().toString())
+        for row, time in self.timeEdits.items():
+            blocker.add_block(row, self.day, time[0].time().toString(), time[1].time().toString())
         self.close()
 
     def cancel(self):
         self.close()
+
+class TimeEdit(QTimeEdit):
+    def __init__(self, time=None):
+        if time == None:
+            super().__init__()
+        else:
+            super().__init__(time)
+        self.setFixedSize(125, 20)
 
 
 

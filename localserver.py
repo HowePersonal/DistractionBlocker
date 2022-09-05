@@ -10,7 +10,7 @@ CORS(app, support_credentials=True)
 @app.route("/")
 def get_blocked_sites():
     config.read(config_file)
-    if config['blocker']['block'] == 'on':
+    if config['blocker']['block'] == 'on' and config['blocker']['scheduleblock'] == 'on':
         return blockerwebsite.read_file()
     else:
         return {"sites": []}
