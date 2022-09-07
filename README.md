@@ -7,3 +7,6 @@ User interaction is maintained through a GUI created with PyQt5, allowing users 
 
 UPDATE 9/02/2022: 
 Refactored program to block websites through browser extension, therefore no longer requiring modification of the hostname. 
+
+UPDATE 9/06/2022:
+Added scheduling feature to allow users to create periods of time in which the blocker would be activated. Created a visualization of these scheduled blocks within the UI.
