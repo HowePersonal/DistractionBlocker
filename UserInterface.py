@@ -5,9 +5,10 @@ import blockerapplication
 import localserver
 import sys
 from PyQt5.uic import loadUi
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialog, QWidget, QApplication, QStackedWidget, QTableWidgetItem, QFileDialog, QTimeEdit, QGroupBox, QFormLayout
-from PyQt5.QtCore import QThread, QTime
+from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtGui import QBrush, QColor
+from PyQt5.QtWidgets import QDialog, QWidget, QApplication, QStackedWidget, QTableWidgetItem, QFileDialog, QTimeEdit, QGroupBox, QFormLayout, QSizePolicy
+from PyQt5.QtCore import QThread, QTime, pyqtSignal
 
 
 class Worker1(QThread):
@@ -228,6 +229,44 @@ class ScheduleBlocksWindow(QDialog):
         self.btn_scheduleSaturday.clicked.connect(lambda: self.schedule_block("Saturday"))
         self.btn_scheduleSunday.clicked.connect(lambda: self.schedule_block("Sunday"))
 
+        self.tableWidget.setRowCount(24)
+        self.tableWidget.setColumnCount(7)
+        self.create_time_tables()
+        for row in range(24):
+            self.tableWidget.verticalHeader().setSectionResizeMode(row, QtWidgets.QHeaderView.Stretch)
+        self.tableWidget.verticalHeader().setVisible(False)
+        self.tableWidget.horizontalHeader().setVisible(False)
+
+        self.color_time_tables()
+
+
+    def create_time_tables(self):
+        for column in range(7):
+            self.tableWidget.horizontalHeader().setSectionResizeMode(column, QtWidgets.QHeaderView.Stretch)
+            for row in range(24):
+                item = QTableWidgetItem()
+                item.setBackground(QBrush(QColor(255, 255, 255)))
+                exec(f"self.tableWidget.setItem({row}, {column}, item)")
+
+    def reset_time_tables(self):
+        for column in range(7):
+            for row in range(24):
+                exec(f"self.tableWidget.item({row}, {column}).setBackground(QBrush(QColor(255, 255, 255)))")
+
+    def color_time_tables(self):
+        data = blocker.read_blocks()
+        for day in data:
+            column = blocker.date_to_value[day]
+            for block in data[day].values():
+                for row in range(int(block[0][:2]), int(block[1][:2])):
+                    exec(f"self.tableWidget.item({row}, {column}).setBackground(QBrush(QColor(135, 206, 235)))")
+
+
+    def update_time_tables(self):
+        self.reset_time_tables()
+        self.color_time_tables()
+
+
     def go_home_win(self):
         widget.setCurrentIndex(widget.currentIndex() - 3)
 
@@ -239,11 +278,14 @@ class ScheduleBlocksWindow(QDialog):
 
     def schedule_block(self, day):
         self.schedule_block_popup = ScheduleBlocksPopupWindow(day)
+        self.schedule_block_popup.sig.connect(self.update_time_tables)
         self.schedule_block_popup.show()
 
 
 
 class ScheduleBlocksPopupWindow(QWidget):
+    sig = pyqtSignal()
+
     def __init__(self, day):
         super().__init__()
         self.day = day
@@ -282,7 +324,7 @@ class ScheduleBlocksPopupWindow(QWidget):
 
             self.form_layout.addRow(time_editFrom, time_editTo)
             self.timeEdits[int(i)] = [time_editFrom, time_editTo]
-        print(self.timeEdits)
+
 
     def addTimeWidget(self):
         row = len(self.timeEdits) + 1
@@ -305,6 +347,8 @@ class ScheduleBlocksPopupWindow(QWidget):
             except:
                 pass
 
+    def closeEvent(self, event):
+        self.sig.emit()
 
     def apply(self):
         for row, time in self.timeEdits.items():
@@ -313,6 +357,7 @@ class ScheduleBlocksPopupWindow(QWidget):
 
     def cancel(self):
         self.close()
+
 
 class TimeEdit(QTimeEdit):
     def __init__(self, time=None):

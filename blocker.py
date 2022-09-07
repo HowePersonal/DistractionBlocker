@@ -9,10 +9,10 @@ import os
 def start_block():
     notification = notifypy.Notify()
     notification.title = "Application Blocked"
+    turning_config = True
     while True:
         should_run = should_block()
         time.sleep(2)
-
         if should_run:
             if turning_config:
                 turn_on_config()
@@ -25,19 +25,19 @@ def start_block():
                 time.sleep(1)
             time.sleep(2)
         else:
-            turning_config = True
+            if turning_config == False: turning_config = True
             turn_off_config()
-            time.sleep(30)
+            time.sleep(20)
 
 def turn_on_config():
     config.read(config_file)
-    config['blocker']['scheduleblock'] == 'on'
+    config['blocker']['scheduleblock'] = 'on'
     with open(config_file, 'w') as write_config:
         config.write(write_config)
 
 def turn_off_config():
     config.read(config_file)
-    config['blocker']['scheduleblock'] == 'off'
+    config['blocker']['scheduleblock'] = 'off'
     with open(config_file, 'w') as write_config:
         config.write(write_config)
 
@@ -79,5 +79,5 @@ def remove_block(listNum, day):
         file.write(json_data)
 
 
-
+date_to_value = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4, "Saturday": 5, "Sunday": 6}
 
