@@ -270,14 +270,15 @@ class HomeWidget(QWidget):
 
         # setting styles
         self.startBlockCheckBox.setStyleSheet(checkBoxStyle)
+        self.startScheduledBlockCheckBox.setStyleSheet(checkBoxStyle)
 
         # buttons
-        self.startBlockCheckBox.stateChanged.connect(self.start_block)
+        self.startScheduledBlockCheckBox.stateChanged.connect(self.start_schduledblock)
 
         # start button initalize
         self.update_start_button()
 
-    def start_block(self):
+    def start_schduledblock(self):
         self.update_start_button()
         with open(config_file, 'w') as write_config:
             config.write(write_config)

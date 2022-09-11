@@ -80,12 +80,28 @@ background-color: rgb(33,33,33);</string>
       <property name="spacing">
        <number>0</number>
       </property>
-      <item row="0" column="0">
+      <item row="1" column="0">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QLabel" name="label">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>280</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_2">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -94,12 +110,29 @@ background-color: rgb(33,33,33);</string>
             </property>
             <property name="styleSheet">
              <string notr="true">color: white;
-font: 17px 10pt &quot;MS Shell Dlg 2&quot;;</string>
+font: 17px 10pt &quot;MS Shell Dlg 2&quot;;
+</string>
             </property>
             <property name="text">
              <string>Start Block</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
           <item>
            <widget class="QCheckBox" name="startBlockCheckBox">
@@ -123,9 +156,84 @@ font: 17px 10pt &quot;MS Shell Dlg 2&quot;;</string>
          </layout>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>200</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: white;
+font: 17px 10pt &quot;MS Shell Dlg 2&quot;;</string>
+            </property>
+            <property name="text">
+             <string>Start Scheduled Block</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="startScheduledBlockCheckBox">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QCheckBox::indicator {
+	width: 50px;
+	height: 50px;
+}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>

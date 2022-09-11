@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>938</width>
-    <height>866</height>
+    <height>898</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -119,7 +119,7 @@ background-color: rgb(24,24,24);</string>
      </property>
      <property name="styleSheet">
       <string notr="true">QTableWidget {
-	
+	border: 1px solid black;
 }
 
 QHeaderView::section {
