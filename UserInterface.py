@@ -94,7 +94,7 @@ class TitleBar(QDialog):
     def btn_minimize(self):
         self.parent.showMinimized()
 
-
+# class adapted from Stack Overflow @musicamante
 class SideGrip(QWidget):
     def __init__(self, parent, edge):
         QtWidgets.QWidget.__init__(self, parent)
@@ -168,6 +168,7 @@ class MainWindow(QMainWindow):
 
         self.setMinimumSize(1100, 920)
 
+        # Resize sidegrips - class adapted from Stack Overflow @musicamante
         self.sideGrips = [
             SideGrip(self, QtCore.Qt.LeftEdge),
             SideGrip(self, QtCore.Qt.TopEdge),

@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>938</width>
+    <width>894</width>
     <height>866</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>938</width>
+    <width>894</width>
     <height>866</height>
    </size>
   </property>
@@ -303,7 +303,7 @@
         <enum>Qt::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Maximum</enum>
+        <enum>QSizePolicy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
