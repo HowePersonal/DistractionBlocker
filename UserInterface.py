@@ -7,8 +7,9 @@ import sys
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtGui import QBrush, QColor
-from PyQt5.QtWidgets import QDialog, QWidget, QApplication, QStackedWidget, QTableWidgetItem, QFileDialog, QTimeEdit, QGroupBox, QFormLayout, QSizePolicy
-from PyQt5.QtCore import QThread, QTime, pyqtSignal
+from PyQt5.QtWidgets import QDialog, QWidget, QApplication, QStackedWidget, QTableWidgetItem, QFileDialog, QTimeEdit, \
+    QGroupBox, QFormLayout, QSizePolicy, QStyle, QMainWindow
+from PyQt5.QtCore import QThread, QTime, pyqtSignal, Qt
 
 
 class Worker1(QThread):
@@ -29,6 +30,10 @@ class alertPopup(QDialog):
 
     def init_ui(self):
         loadUi("ui/alertPopup.ui", self)
+
+
+
+        self.setMinimumSize(400,300)
         self.btn_alert.accepted.connect(self.alert_accept)
         self.btn_alert.rejected.connect(self.alert_rejected)
 
@@ -48,10 +53,213 @@ class alertPopup(QDialog):
     def alert_rejected(self):
         self.close()
 
+# Code below adapted from stack overflow @yurisnm
+class TitleBar(QDialog):
+    def __init__(self, parent):
+        super(TitleBar, self).__init__()
+        self.parent = parent
+        loadUi("ui/titlebar.ui", self)
+        self.toolbtn_close.clicked.connect(self.btn_close)
+        self.toolbtn_minimize.clicked.connect(self.btn_minimize)
+        self.toolbtn_maximize.clicked.connect(self.btn_maximize)
+        self.max = False
+        self.pressing = False
+
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.clickPos = event.windowPos().toPoint()
+
+    def mouseMoveEvent(self, event):
+        if self.clickPos is not None:
+            self.window().move(event.globalPos() - self.clickPos)
+
+    def mouseReleaseEvent(self, QMouseEvent):
+        self.clickPos = None
+
+
+    def btn_close(self):
+        self.parent.close()
+        self.close()
+
+    def btn_maximize(self):
+        if self.max:
+            self.max = False
+            self.parent.showNormal()
+        else:
+            self.parent.showMaximized()
+            self.max = True
+
+
+    def btn_minimize(self):
+        self.parent.showMinimized()
+
+
+class SideGrip(QWidget):
+    def __init__(self, parent, edge):
+        QtWidgets.QWidget.__init__(self, parent)
+        if edge == QtCore.Qt.LeftEdge:
+            self.setCursor(QtCore.Qt.SizeHorCursor)
+            self.resizeFunc = self.resizeLeft
+        elif edge == QtCore.Qt.TopEdge:
+            self.setCursor(QtCore.Qt.SizeVerCursor)
+            self.resizeFunc = self.resizeTop
+        elif edge == QtCore.Qt.RightEdge:
+            self.setCursor(QtCore.Qt.SizeHorCursor)
+            self.resizeFunc = self.resizeRight
+        else:
+            self.setCursor(QtCore.Qt.SizeVerCursor)
+            self.resizeFunc = self.resizeBottom
+        self.mousePos = None
+
+        self.setStyleSheet("""
+                background-color: transparent; 
+        """)
+
+    def resizeLeft(self, delta):
+        window = self.window()
+        width = max(window.minimumWidth(), window.width() - delta.x())
+        geo = window.geometry()
+        geo.setLeft(geo.right() - width)
+        window.setGeometry(geo)
+
+    def resizeTop(self, delta):
+        window = self.window()
+        height = max(window.minimumHeight(), window.height() - delta.y())
+        geo = window.geometry()
+        geo.setTop(geo.bottom() - height)
+        window.setGeometry(geo)
+
+    def resizeRight(self, delta):
+        window = self.window()
+        width = max(window.minimumWidth(), window.width() + delta.x())
+        window.resize(width, window.height())
+
+    def resizeBottom(self, delta):
+        window = self.window()
+        height = max(window.minimumHeight(), window.height() + delta.y())
+        window.resize(window.width(), height)
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self.mousePos = event.pos()
+
+    def mouseMoveEvent(self, event):
+        if self.mousePos is not None:
+            delta = event.pos() - self.mousePos
+            self.resizeFunc(delta)
+
+    def mouseReleaseEvent(self, event):
+        self.mousePos = None
+
+
+class MainWindow(QMainWindow):
+    _gripSize = 1.5
+    def __init__(self):
+        super().__init__()
+        self.init_ui()
+
+    def init_ui(self):
+        self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint)
+        loadUi("ui/mainwindow.ui", self)
+
+        self.titleBar = TitleBar(self)
+        self.scrollArea.setWidget(self.titleBar)
+
+        self.setMinimumSize(1100, 920)
+
+        self.sideGrips = [
+            SideGrip(self, QtCore.Qt.LeftEdge),
+            SideGrip(self, QtCore.Qt.TopEdge),
+            SideGrip(self, QtCore.Qt.RightEdge),
+            SideGrip(self, QtCore.Qt.BottomEdge),
+        ]
+
+        self.cornerGrips = [QtWidgets.QSizeGrip(self) for i in range(4)]
+
+        # setup pages
+        self.homeWidget = HomeWidget()
+        self.blockedSitesWidget = BlockedSitesWidget()
+        self.blockedAppsWidget = BlockedAppsWidget()
+        self.scheduleBlocksWidget = ScheduleBlocksWidget()
+
+        self.stackedWidget.addWidget(self.homeWidget)
+        self.stackedWidget.addWidget(self.blockedSitesWidget)
+        self.stackedWidget.addWidget(self.blockedAppsWidget)
+        self.stackedWidget.addWidget(self.scheduleBlocksWidget)
+
+        # transition widget windows:
+        self.btn_home.clicked.connect(self.go_home_win)
+        self.btn_blockedWeb.clicked.connect(self.go_web_win)
+        self.btn_blockedApps.clicked.connect(self.go_app_win)
+        self.btn_scheduleBlocks.clicked.connect(self.go_schedule_win)
+
+    @property
+    def gripSize(self):
+        return self._gripSize
+
+    def setGripSize(self, size):
+        if size == self._gripSize:
+            return
+        self._gripSize = max(2, size)
+        self.updateGrips()
+
+    def updateGrips(self):
+        self.setContentsMargins(*[self.gripSize] * 4)
+
+        outRect = self.rect()
+        # an "inner" rect used for reference to set the geometries of size grips
+        inRect = outRect.adjusted(self.gripSize, self.gripSize,
+                                  -self.gripSize, -self.gripSize)
+
+        # top left
+        self.cornerGrips[0].setGeometry(
+            QtCore.QRect(outRect.topLeft(), inRect.topLeft()))
+        # top right
+        self.cornerGrips[1].setGeometry(
+            QtCore.QRect(outRect.topRight(), inRect.topRight()).normalized())
+        # bottom right
+        self.cornerGrips[2].setGeometry(
+            QtCore.QRect(inRect.bottomRight(), outRect.bottomRight()))
+        # bottom left
+        self.cornerGrips[3].setGeometry(
+            QtCore.QRect(outRect.bottomLeft(), inRect.bottomLeft()).normalized())
+
+        # left edge
+        self.sideGrips[0].setGeometry(
+            0, inRect.top(), self.gripSize, inRect.height())
+        # top edge
+        self.sideGrips[1].setGeometry(
+            inRect.left(), 0, inRect.width(), self.gripSize)
+        # right edge
+        self.sideGrips[2].setGeometry(
+            inRect.left() + inRect.width(),
+            inRect.top(), self.gripSize, inRect.height())
+        # bottom edge
+        self.sideGrips[3].setGeometry(
+            self.gripSize, inRect.top() + inRect.height(),
+            inRect.width(), self.gripSize)
+
+    def resizeEvent(self, event):
+        QtWidgets.QMainWindow.resizeEvent(self, event)
+        self.updateGrips()
+
+    def go_home_win(self):
+        self.stackedWidget.setCurrentIndex(0)
+
+    def go_web_win(self):
+        self.stackedWidget.setCurrentIndex(1)
+
+    def go_app_win(self):
+        self.stackedWidget.setCurrentIndex(2)
+
+    def go_schedule_win(self):
+        self.stackedWidget.setCurrentIndex(3)
 
 
 
-class HomeWindow(QDialog):
+
+class HomeWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.init_ui()
@@ -61,11 +269,6 @@ class HomeWindow(QDialog):
 
         # setting styles
         self.startBlockCheckBox.setStyleSheet(checkBoxStyle)
-
-        # transition windows
-        self.btn_blockedWeb.clicked.connect(self.go_web_win)
-        self.btn_blockedApps.clicked.connect(self.go_app_win)
-        self.btn_scheduleBlocks.clicked.connect(self.go_schedule_win)
 
         # buttons
         self.startBlockCheckBox.stateChanged.connect(self.start_block)
@@ -85,17 +288,7 @@ class HomeWindow(QDialog):
             config['blocker']['block'] = 'off'
 
 
-    def go_web_win(self):
-        widget.setCurrentIndex(widget.currentIndex() + 1)
-
-    def go_app_win(self):
-        widget.setCurrentIndex(widget.currentIndex() + 2)
-
-    def go_schedule_win(self):
-        widget.setCurrentIndex(widget.currentIndex() + 3)
-
-
-class BlockedSitesWindow(QDialog):
+class BlockedSitesWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.init_ui()
@@ -103,16 +296,14 @@ class BlockedSitesWindow(QDialog):
     def init_ui(self):
         loadUi("ui/blockedweb.ui", self)
         self.tableWidget.verticalHeader().setVisible(False)
+
+        # load in existing table items
         self.load_items()
 
+        # table buttons
         self.btn_add.clicked.connect(self.add_item)
         self.blockSiteTextBox.returnPressed.connect(self.add_item)
         self.btn_delete.clicked.connect(self.remove_item)
-
-        #transition windows
-        self.btn_home.clicked.connect(self.go_home_win)
-        self.btn_blockedApps.clicked.connect(self.go_app_win)
-        self.btn_scheduleBlocks.clicked.connect(self.go_schedule_win)
 
     def load_items(self):
         blocked_sites = blockerwebsite.blocked_WEB()
@@ -141,19 +332,10 @@ class BlockedSitesWindow(QDialog):
             blockerwebsite.delete_block(hostname)
             self.tableWidget.removeRow(self.tableWidget.currentRow())
 
-    def go_home_win(self):
-        widget.setCurrentIndex(widget.currentIndex()-1)
-
-    def go_app_win(self):
-        widget.setCurrentIndex(widget.currentIndex()+1)
-
-    def go_schedule_win(self):
-        widget.setCurrentIndex(widget.currentIndex() + 2)
 
 
 
-
-class BlockedAppsWindow(QDialog):
+class BlockedAppsWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.init_ui()
@@ -162,15 +344,12 @@ class BlockedAppsWindow(QDialog):
         loadUi("ui/blockedapps.ui", self)
         self.tableWidget.verticalHeader().setVisible(False)
 
+        # load in existing table items
         self.load_items()
 
+        # table buttons
         self.btn_addApp.clicked.connect(self.add_item)
         self.btn_deleteApp.clicked.connect(self.remove_item)
-
-        # transition windows
-        self.btn_home.clicked.connect(self.go_home_win)
-        self.btn_blockedWeb.clicked.connect(self.go_web_win)
-        self.btn_scheduleBlocks.clicked.connect(self.go_schedule_win)
 
     def load_items(self):
         blocked_sites = blockerapplication.blocked_APPS()
@@ -195,30 +374,16 @@ class BlockedAppsWindow(QDialog):
             blockerapplication.delete_block(appname)
             self.tableWidget.removeRow(self.tableWidget.currentRow())
 
-    def go_home_win(self):
-        widget.setCurrentIndex(widget.currentIndex()-2)
-
-    def go_web_win(self):
-        widget.setCurrentIndex(widget.currentIndex()-1)
-
-    def go_schedule_win(self):
-        widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
 
-
-class ScheduleBlocksWindow(QDialog):
+class ScheduleBlocksWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.init_ui()
 
     def init_ui(self):
         loadUi("ui/scheduleblocks.ui", self)
-
-        #transition windows
-        self.btn_home.clicked.connect(self.go_home_win)
-        self.btn_blockedWeb.clicked.connect(self.go_web_win)
-        self.btn_blockedApps.clicked.connect(self.go_app_win)
 
         #schedule blocks windows
         self.btn_scheduleMonday.clicked.connect(lambda: self.schedule_block("Monday"))
@@ -266,20 +431,12 @@ class ScheduleBlocksWindow(QDialog):
         self.reset_time_tables()
         self.color_time_tables()
 
-
-    def go_home_win(self):
-        widget.setCurrentIndex(widget.currentIndex() - 3)
-
-    def go_web_win(self):
-        widget.setCurrentIndex(widget.currentIndex() - 2)
-
-    def go_app_win(self):
-        widget.setCurrentIndex(widget.currentIndex() - 1)
-
     def schedule_block(self, day):
         self.schedule_block_popup = ScheduleBlocksPopupWindow(day)
         self.schedule_block_popup.sig.connect(self.update_time_tables)
         self.schedule_block_popup.show()
+
+
 
 
 
@@ -370,9 +527,12 @@ class TimeEdit(QTimeEdit):
 
 
 
+
+
+
+
+
 def confirm_start():
-    global widget
-    widget = QStackedWidget()
     alertWin = alertPopup()
     alertWin.show()
 
@@ -380,25 +540,11 @@ def confirm_start():
 
 
 
-def create_windows():
-    home_win = HomeWindow()
-    widget.addWidget(home_win)
-
-    blocked_sites_win = BlockedSitesWindow()
-    widget.addWidget(blocked_sites_win)
-
-    blocked_apps_win = BlockedAppsWindow()
-    widget.addWidget(blocked_apps_win)
-
-    schedule_blocks_win = ScheduleBlocksWindow()
-    widget.addWidget(schedule_blocks_win)
-
-
 def start_program():
-    create_windows()
-
-    widget.resize(800, 500)
-    widget.show()
+    global Window
+    Window = MainWindow()
+    Window.resize(800, 500)
+    Window.show()
     sys.exit(app.exec_())
 
 
