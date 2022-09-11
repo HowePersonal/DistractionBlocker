@@ -11,5 +11,5 @@ Refactored program to block websites through browser extension, therefore no lon
 UPDATE 9/06/2022:
 Added scheduling feature to allow users to create periods of time in which the blocker would be activated. Created a visualization of these scheduled blocks within the UI.
 
-UPDATE 9/10/2022
+UPDATE 9/10/2022:
 Refactored full Qt GUI by using one single window as the UI, created custom title bar for better style and frames to allow for resizing
