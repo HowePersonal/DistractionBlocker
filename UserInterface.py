@@ -189,11 +189,16 @@ class MainWindow(QMainWindow):
         self.stackedWidget.addWidget(self.blockedAppsWidget)
         self.stackedWidget.addWidget(self.scheduleBlocksWidget)
 
+        # initalize centralized window button style
+        self.btn_home.setStyleSheet(windowPushButtonStyle)
+        self.current_button = "self.btn_home"
+
         # transition widget windows:
-        self.btn_home.clicked.connect(self.go_home_win)
-        self.btn_blockedWeb.clicked.connect(self.go_web_win)
-        self.btn_blockedApps.clicked.connect(self.go_app_win)
-        self.btn_scheduleBlocks.clicked.connect(self.go_schedule_win)
+        self.btn_home.clicked.connect(lambda: self.transition_widget_win("self.btn_home"))
+        self.btn_blockedWeb.clicked.connect(lambda: self.transition_widget_win("self.btn_blockedWeb"))
+        self.btn_blockedApps.clicked.connect(lambda: self.transition_widget_win("self.btn_blockedApps"))
+        self.btn_scheduleBlocks.clicked.connect(lambda: self.transition_widget_win("self.btn_scheduleBlocks"))
+
 
     @property
     def gripSize(self):
@@ -245,17 +250,12 @@ class MainWindow(QMainWindow):
         QtWidgets.QMainWindow.resizeEvent(self, event)
         self.updateGrips()
 
-    def go_home_win(self):
-        self.stackedWidget.setCurrentIndex(0)
+    def transition_widget_win(self, button_name):
+        exec(f"{self.current_button}.setStyleSheet(windowUnpushButtonStyle)")
+        self.current_button = button_name
+        exec(f"{self.current_button}.setStyleSheet(windowPushButtonStyle)")
+        exec(f"self.stackedWidget.setCurrentIndex({button_index[button_name]})")
 
-    def go_web_win(self):
-        self.stackedWidget.setCurrentIndex(1)
-
-    def go_app_win(self):
-        self.stackedWidget.setCurrentIndex(2)
-
-    def go_schedule_win(self):
-        self.stackedWidget.setCurrentIndex(3)
 
 
 
@@ -273,21 +273,45 @@ class HomeWidget(QWidget):
         self.startScheduledBlockCheckBox.setStyleSheet(checkBoxStyle)
 
         # buttons
-        self.startScheduledBlockCheckBox.stateChanged.connect(self.start_schduledblock)
+        self.startBlockCheckBox.stateChanged.connect(self.start_block)
+        self.startScheduledBlockCheckBox.stateChanged.connect(self.start_scheduledblock)
 
         # start button initalize
-        self.update_start_button()
+        initial_Block = config['blocker']['block']
+        initial_scheduledBlock = config['blocker']['scheduledblock']
 
-    def start_schduledblock(self):
-        self.update_start_button()
+        if initial_Block == 'off':
+            self.startBlockCheckBox.setChecked(False)
+        else:
+            self.startBlockCheckBox.setChecked(True)
+
+        if initial_scheduledBlock == 'off':
+            self.startScheduledBlockCheckBox.setChecked(False)
+        else:
+            self.startScheduledBlockCheckBox.setChecked(True)
+
+
+    def start_block(self):
+        self.update_block_button()
         with open(config_file, 'w') as write_config:
             config.write(write_config)
 
-    def update_start_button(self):
+    def start_scheduledblock(self):
+        self.update_scheduledblock_button()
+        with open(config_file, 'w') as write_config:
+            config.write(write_config)
+
+    def update_block_button(self):
         if self.startBlockCheckBox.isChecked():
             config['blocker']['block'] = 'on'
         else:
             config['blocker']['block'] = 'off'
+
+    def update_scheduledblock_button(self):
+        if self.startScheduledBlockCheckBox.isChecked():
+            config['blocker']['scheduledblock'] = 'on'
+        else:
+            config['blocker']['scheduledblock'] = 'off'
 
 
 class BlockedSitesWidget(QWidget):
@@ -554,6 +578,34 @@ def start_program():
 
 
 app = QApplication(sys.argv)
+
+
+# setting up global UI variables
+button_index = {"self.btn_home": 0, "self.btn_blockedWeb": 1, "self.btn_blockedApps": 2, "self.btn_scheduleBlocks": 3}
+
+windowUnpushButtonStyle = """
+    QPushButton {
+	color: white;
+	font: 63 12pt "Cascadia Mono SemiBold";
+	background-color: rgb(24,24,24);
+	border: 0;
+    }
+
+    QPushButton::hover {
+	    background-color: black;
+    }
+"""
+
+windowPushButtonStyle = """
+    QPushButton {
+	    color: white;
+	    font: 63 12pt "Cascadia Mono SemiBold";
+	    background-color: black;
+	    border: 0;
+    }
+
+"""
+
 
 checkBoxStyle = """
     QCheckBox::indicator {

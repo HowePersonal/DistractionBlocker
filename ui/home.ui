@@ -94,7 +94,7 @@ background-color: rgb(33,33,33);</string>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>280</width>
+              <width>20</width>
               <height>20</height>
              </size>
             </property>
@@ -128,7 +128,7 @@ font: 17px 10pt &quot;MS Shell Dlg 2&quot;;
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>20</width>
+              <width>100</width>
               <height>20</height>
              </size>
             </property>
@@ -167,7 +167,7 @@ font: 17px 10pt &quot;MS Shell Dlg 2&quot;;
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>200</width>
+              <width>20</width>
               <height>20</height>
              </size>
             </property>
