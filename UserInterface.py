@@ -401,7 +401,7 @@ class BlockedSitesWidget(QWidget):
         self.blockSiteTextBox.clear()
 
     def remove_item(self):
-        if self.tableWidget.rowCount() > 0:
+        if self.tableWidget.currentRow() != -1 and self.tableWidget.rowCount() > 0:
             hostname = self.tableWidget.item(self.tableWidget.currentRow(), 0).text()
             blockerwebsite.delete_block(hostname)
             self.tableWidget.removeRow(self.tableWidget.currentRow())
@@ -439,15 +439,15 @@ class BlockedAppsWidget(QWidget):
     def add_item(self):
         application_name = QFileDialog.getOpenFileName(self, "Open File", "C:/", "All Files (*)")
         appname = application_name[0].split("/")[-1]
-
-        self.tableWidget.insertRow(self.tableWidget.rowCount())
-        item = QTableWidgetItem(appname)
-        item.setTextAlignment(Qt.AlignCenter)
-        self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 0, item)
-        blockerapplication.add_block(appname)
+        if len(appname) != 0:
+            self.tableWidget.insertRow(self.tableWidget.rowCount())
+            item = QTableWidgetItem(appname)
+            item.setTextAlignment(Qt.AlignCenter)
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 0, item)
+            blockerapplication.add_block(appname)
 
     def remove_item(self):
-        if self.tableWidget.rowCount() > 0:
+        if self.tableWidget.currentRow() != -1 and self.tableWidget.rowCount() > 0:
             appname = self.tableWidget.item(self.tableWidget.currentRow(), 0).text()
             blockerapplication.delete_block(appname)
             self.tableWidget.removeRow(self.tableWidget.currentRow())

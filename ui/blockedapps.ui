@@ -24,16 +24,16 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
-    <number>0</number>
+    <number>5</number>
    </property>
    <property name="topMargin">
-    <number>0</number>
+    <number>5</number>
    </property>
    <property name="rightMargin">
-    <number>0</number>
+    <number>5</number>
    </property>
    <property name="bottomMargin">
-    <number>0</number>
+    <number>5</number>
    </property>
    <property name="horizontalSpacing">
     <number>0</number>
@@ -53,14 +53,22 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>75</width>
-         <height>25</height>
+         <width>100</width>
+         <height>35</height>
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: white;
-font: 75 10pt &quot;MS Shell Dlg 2&quot;;
-background-color: rgb(24,24,24);</string>
+        <string notr="true">QPushButton {
+	color: white;
+	font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(24,24,24);
+	border: 0;
+}
+
+QPushButton::hover {
+	background-color: black;
+}
+</string>
        </property>
        <property name="text">
         <string>ADD APP</string>
@@ -90,14 +98,22 @@ background-color: rgb(24,24,24);</string>
        </property>
        <property name="minimumSize">
         <size>
-         <width>75</width>
-         <height>25</height>
+         <width>100</width>
+         <height>35</height>
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: white;
-font: 75 10pt &quot;MS Shell Dlg 2&quot;;
-background-color: rgb(24,24,24);</string>
+        <string notr="true">QPushButton {
+	color: white;
+	font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(24,24,24);
+	border: 0;
+}
+
+QPushButton::hover {
+	background-color: black;
+}
+</string>
        </property>
        <property name="text">
         <string>DELETE</string>
@@ -110,8 +126,8 @@ background-color: rgb(24,24,24);</string>
     <widget class="QTableWidget" name="tableWidget">
      <property name="minimumSize">
       <size>
-       <width>894</width>
-       <height>866</height>
+       <width>0</width>
+       <height>0</height>
       </size>
      </property>
      <property name="autoFillBackground">
