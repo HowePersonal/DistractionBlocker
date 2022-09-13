@@ -4,6 +4,8 @@ import blockerwebsite
 import blockerapplication
 import localserver
 import sys
+import pystray
+import PIL.Image
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtGui import QBrush, QColor
@@ -53,6 +55,8 @@ class alertPopup(QDialog):
     def alert_rejected(self):
         self.close()
 
+
+
 # Code below adapted from stack overflow @yurisnm
 class TitleBar(QDialog):
     def __init__(self, parent):
@@ -64,6 +68,19 @@ class TitleBar(QDialog):
         self.toolbtn_maximize.clicked.connect(self.btn_maximize)
         self.max = False
         self.pressing = False
+
+
+
+
+    def HiddenAppClicked(self, icon, item):
+        if str(item) == "Maximize":
+            icon.stop()
+            self.parent.show()
+            self.show()
+        elif str(item) == "Exit":
+            icon.stop()
+            self.parent.close()
+            self.close()
 
 
     def mousePressEvent(self, event):
@@ -79,8 +96,16 @@ class TitleBar(QDialog):
 
 
     def btn_close(self):
-        self.parent.close()
-        self.close()
+        self.parent.hide()
+        self.hide()
+        image = PIL.Image.open("app_images/appicon.png")
+        icon = pystray.Icon("appicon", image, menu=pystray.Menu(
+            pystray.MenuItem("Maximize", self.HiddenAppClicked),
+            pystray.MenuItem("Exit", self.HiddenAppClicked)
+        ))
+        icon.run()
+
+
 
     def btn_maximize(self):
         if self.max:
@@ -93,6 +118,7 @@ class TitleBar(QDialog):
 
     def btn_minimize(self):
         self.parent.showMinimized()
+
 
 # class adapted from Stack Overflow @musicamante
 class SideGrip(QWidget):
@@ -354,7 +380,7 @@ class HomeWidget(QWidget):
 
     def disable_schedule_button(self):
         if not blocker.should_block() and config['blocker']['scheduledblock'] == 'off' and config['blocker']['lockscheduledblock'] == 'off':
-            print(11111)
+            pass
 
 
 
@@ -606,6 +632,9 @@ class TimeEdit(QTimeEdit):
 
 
 
+
+
+
 def confirm_start():
     alertWin = alertPopup()
     alertWin.show()
@@ -617,7 +646,6 @@ def confirm_start():
 def start_program():
     global Window
     Window = MainWindow()
-    Window.resize(800, 500)
     Window.show()
     sys.exit(app.exec_())
 
