@@ -94,10 +94,14 @@ border: 1px solid black;</string>
 QHeaderView::section {
 	background-color: rgb(24,24,24);
 	color: white;
+	font-size: 16px;
+	font-weight: bold;
+	font-family: &quot;roboto&quot;;
 }
 
 QTableWidget::item {
 	color: white;
+	font: 75 10pt &quot;Segoe UI&quot;;
 }</string>
      </property>
      <property name="alternatingRowColors">

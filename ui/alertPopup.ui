@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>358</width>
+    <width>320</width>
     <height>300</height>
    </rect>
   </property>
@@ -56,8 +56,9 @@ font: 75 12pt &quot;MS Shell Dlg 2&quot;;
 </string>
      </property>
      <property name="text">
-      <string>WARNING: Continuing will shut down all currently 
-open browser. Please save your work or cancel.</string>
+      <string>WARNING: Continuing will shut down all 
+ unsupported browser. Please save your
+                  work or cancel.</string>
      </property>
     </widget>
    </item>

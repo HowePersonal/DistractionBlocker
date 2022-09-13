@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>938</width>
+    <width>894</width>
     <height>898</height>
    </rect>
   </property>
@@ -125,10 +125,16 @@ background-color: rgb(24,24,24);</string>
 QHeaderView::section {
 	background-color: rgb(24,24,24);
 	color: white;
+	font-size: 16px;
+	font-weight: bold;
+	font-family: &quot;roboto&quot;;
 }
 
 QTableWidget::item {
 	color: white;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: &quot;roboto&quot;;
 }</string>
      </property>
      <property name="alternatingRowColors">

@@ -271,35 +271,62 @@ class HomeWidget(QWidget):
         # setting styles
         self.startBlockCheckBox.setStyleSheet(checkBoxStyle)
         self.startScheduledBlockCheckBox.setStyleSheet(checkBoxStyle)
+        self.startLockScheduledBlock.setStyleSheet(checkBoxStyle)
+        self.startBlockTaskManager.setStyleSheet(checkBoxStyle)
 
         # buttons
-        self.startBlockCheckBox.stateChanged.connect(self.start_block)
-        self.startScheduledBlockCheckBox.stateChanged.connect(self.start_scheduledblock)
+        self.startBlockCheckBox.stateChanged.connect(self.change_block)
+        self.startScheduledBlockCheckBox.stateChanged.connect(self.change_scheduledblock)
+        self.startLockScheduledBlock.stateChanged.connect(self.change_lockscheduledblock)
+        self.startBlockTaskManager.stateChanged.connect(self.change_blocktaskmanager)
 
-        # start button initalize
-        initial_Block = config['blocker']['block']
+        # block button initalize
+        initial_block = config['blocker']['block']
         initial_scheduledBlock = config['blocker']['scheduledblock']
+        initial_lockScheduledBlock = config['blocker']['lockscheduledblock']
+        initial_blockTaskManager = config['blocker']['blocktaskmanager']
 
-        if initial_Block == 'off':
-            self.startBlockCheckBox.setChecked(False)
-        else:
+        if initial_block == "on":
             self.startBlockCheckBox.setChecked(True)
-
-        if initial_scheduledBlock == 'off':
-            self.startScheduledBlockCheckBox.setChecked(False)
         else:
+            self.startBlockCheckBox.setChecked(False)
+
+        if initial_scheduledBlock == "on":
             self.startScheduledBlockCheckBox.setChecked(True)
+        else:
+            self.startScheduledBlockCheckBox.setChecked(False)
+
+        if initial_lockScheduledBlock == 'on':
+            self.startLockScheduledBlock.setChecked(True)
+        else:
+            self.startLockScheduledBlock.setChecked(False)
+
+        if initial_blockTaskManager == "on":
+            self.startBlockTaskManager.setChecked(True)
+        else:
+            self.startBlockTaskManager.setChecked(False)
 
 
-    def start_block(self):
+    def change_block(self):
         self.update_block_button()
         with open(config_file, 'w') as write_config:
             config.write(write_config)
 
-    def start_scheduledblock(self):
+    def change_scheduledblock(self):
         self.update_scheduledblock_button()
         with open(config_file, 'w') as write_config:
             config.write(write_config)
+
+    def change_lockscheduledblock(self):
+        self.update_lockscheduledblock_button()
+        with open(config_file, 'w') as write_config:
+            config.write(write_config)
+
+    def change_blocktaskmanager(self):
+        self.update_blocktaskmanager_button()
+        with open(config_file, 'w') as write_config:
+            config.write(write_config)
+
 
     def update_block_button(self):
         if self.startBlockCheckBox.isChecked():
@@ -312,6 +339,23 @@ class HomeWidget(QWidget):
             config['blocker']['scheduledblock'] = 'on'
         else:
             config['blocker']['scheduledblock'] = 'off'
+
+    def update_lockscheduledblock_button(self):
+        if self.startLockScheduledBlock.isChecked():
+            config['blocker']['lockscheduledblock'] = 'on'
+        else:
+            config['blocker']['lockscheduledblock'] = 'off'
+
+    def update_blocktaskmanager_button(self):
+        if self.startBlockTaskManager.isChecked():
+            config['blocker']['blocktaskmanager'] = 'on'
+        else:
+            config['blocker']['blocktaskmanager'] = 'off'
+
+    def disable_schedule_button(self):
+        if not blocker.should_block() and config['blocker']['scheduledblock'] == 'off' and config['blocker']['lockscheduledblock'] == 'off':
+            print(11111)
+
 
 
 class BlockedSitesWidget(QWidget):
@@ -338,14 +382,18 @@ class BlockedSitesWidget(QWidget):
 
         for site in blocked_sites:
             if site[:4] != 'www.':
-                self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(site))
+                item = QTableWidgetItem(site)
+                item.setTextAlignment(Qt.AlignCenter)
+                self.tableWidget.setItem(row, 0, item)
                 row += 1
 
     def add_item(self):
         value = self.blockSiteTextBox.text()
         if value:
             self.tableWidget.insertRow(self.tableWidget.rowCount())
-            self.tableWidget.setItem(self.tableWidget.rowCount()-1, 0, QTableWidgetItem(value))
+            item = QTableWidgetItem(value)
+            item.setTextAlignment(Qt.AlignCenter)
+            self.tableWidget.setItem(self.tableWidget.rowCount()-1, 0, item)
             blockerwebsite.add_block(value)
         else:
             print("Enter non-empty address")
@@ -383,7 +431,9 @@ class BlockedAppsWidget(QWidget):
         self.tableWidget.setRowCount(len(blocked_sites))
 
         for site in blocked_sites:
-            self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(site))
+            item = QTableWidgetItem(site)
+            item.setTextAlignment(Qt.AlignCenter)
+            self.tableWidget.setItem(row, 0, item)
             row += 1
 
     def add_item(self):
@@ -391,7 +441,9 @@ class BlockedAppsWidget(QWidget):
         appname = application_name[0].split("/")[-1]
 
         self.tableWidget.insertRow(self.tableWidget.rowCount())
-        self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 0, QTableWidgetItem(appname))
+        item = QTableWidgetItem(appname)
+        item.setTextAlignment(Qt.AlignCenter)
+        self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 0, item)
         blockerapplication.add_block(appname)
 
     def remove_item(self):
@@ -515,13 +567,10 @@ class ScheduleBlocksPopupWindow(QWidget):
         time_editTo = TimeEdit()
         self.form_layout.addRow(time_editFrom, time_editTo)
         self.timeEdits[row] = [time_editFrom, time_editTo]
-        print(row)
 
     def deleteTimeWidget(self):
 
         row = len(self.timeEdits)
-
-
         if row >= 1:
             self.form_layout.removeRow(row-1)
             del self.timeEdits[row]
@@ -534,8 +583,7 @@ class ScheduleBlocksPopupWindow(QWidget):
         self.sig.emit()
 
     def apply(self):
-        for row, time in self.timeEdits.items():
-            blocker.add_block(row, self.day, time[0].time().toString(), time[1].time().toString())
+        blocker.add_block(self.day, self.timeEdits.items())
         self.close()
 
     def cancel(self):

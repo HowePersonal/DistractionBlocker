@@ -11,8 +11,9 @@ def start_block():
     notification.title = "Application Blocked"
 
     while True:
-        time.sleep(2)
+        time.sleep(1)
         if should_block():
+            if os.system(f'tasklist | find "Taskmgr.exe"') == 0 and should_blockTaskManager(): os.system(f"taskkill /im taskmgr.exe /f")
             for item in blockerapplication.read_file():
                 if os.system(f'tasklist | find "{item.strip()}"') == 0:
                     os.system(f"taskkill /im {item.strip()} /f")
@@ -46,14 +47,23 @@ def should_block():
                 return True
     return False
 
+def should_blockTaskManager():
+    config.read(config_file)
+
+    if config['blocker']['blocktaskmanager'] == 'on':
+        return True
+    return False
 
 
-def add_block(listNum, day, start, end):
+def add_block(day, items):
     data = read_blocks()
-
-    data[day][listNum] = []
-    data[day][listNum].append(start)
-    data[day][listNum].append(end)
+    data[day] = {}
+    listNum = 1
+    for row, time in items:
+        data[day][listNum] = []
+        data[day][listNum].append(time[0].time().toString())
+        data[day][listNum].append(time[1].time().toString())
+        listNum += 1
 
     json_data = json.dumps(data)
     with open('blockerfiles/blocks.json', 'w') as file:
