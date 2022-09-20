@@ -32,12 +32,10 @@ class alertPopup(QDialog):
 
     def init_ui(self):
         loadUi("ui/alertPopup.ui", self)
-
-
-
         self.setMinimumSize(400,300)
         self.btn_alert.accepted.connect(self.alert_accept)
         self.btn_alert.rejected.connect(self.alert_rejected)
+
 
     def alert_accept(self):
         self.close()
@@ -69,20 +67,6 @@ class TitleBar(QDialog):
         self.max = False
         self.pressing = False
 
-
-
-
-    def HiddenAppClicked(self, icon, item):
-        if str(item) == "Maximize":
-            icon.stop()
-            self.parent.show()
-            self.show()
-        elif str(item) == "Exit":
-            icon.stop()
-            self.parent.close()
-            self.close()
-
-
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.clickPos = event.windowPos().toPoint()
@@ -95,12 +79,22 @@ class TitleBar(QDialog):
         self.clickPos = None
 
 
+    def HiddenAppClicked(self, icon, item):
+        if str(item) == "Maximize":
+            icon.stop()
+            self.parent.show()
+            self.show()
+        elif str(item) == "Exit":
+            icon.stop()
+            self.parent.close()
+            self.close()
+
     def btn_close(self):
         self.parent.hide()
         self.hide()
         image = PIL.Image.open("app_images/appicon.png")
         icon = pystray.Icon("appicon", image, menu=pystray.Menu(
-            pystray.MenuItem("Maximize", self.HiddenAppClicked),
+            pystray.MenuItem("Maximize", self.HiddenAppClicked, default=True),
             pystray.MenuItem("Exit", self.HiddenAppClicked)
         ))
         icon.run()
@@ -413,6 +407,8 @@ class BlockedSitesWidget(QWidget):
                 self.tableWidget.setItem(row, 0, item)
                 row += 1
 
+
+
     def add_item(self):
         value = self.blockSiteTextBox.text()
         if value:
@@ -498,28 +494,32 @@ class ScheduleBlocksWidget(QWidget):
         self.btn_scheduleSaturday.clicked.connect(lambda: self.schedule_block("Saturday"))
         self.btn_scheduleSunday.clicked.connect(lambda: self.schedule_block("Sunday"))
 
-        self.tableWidget.setRowCount(24)
+        self.tableWidget.setRowCount(144)
         self.tableWidget.setColumnCount(7)
+        self.tableWidget.resizeRowsToContents()
         self.create_time_tables()
-        for row in range(24):
+        for row in range(144):
             self.tableWidget.verticalHeader().setSectionResizeMode(row, QtWidgets.QHeaderView.Stretch)
-        self.tableWidget.verticalHeader().setVisible(False)
+
         self.tableWidget.horizontalHeader().setVisible(False)
 
         self.color_time_tables()
 
 
+
     def create_time_tables(self):
         for column in range(7):
             self.tableWidget.horizontalHeader().setSectionResizeMode(column, QtWidgets.QHeaderView.Stretch)
-            for row in range(24):
+            for row in range(144):
                 item = QTableWidgetItem()
                 item.setBackground(QBrush(QColor(255, 255, 255)))
+                item.setFlags(item.flags() ^ Qt.ItemIsEditable)
                 exec(f"self.tableWidget.setItem({row}, {column}, item)")
+
 
     def reset_time_tables(self):
         for column in range(7):
-            for row in range(24):
+            for row in range(144):
                 exec(f"self.tableWidget.item({row}, {column}).setBackground(QBrush(QColor(255, 255, 255)))")
 
     def color_time_tables(self):
@@ -527,8 +527,27 @@ class ScheduleBlocksWidget(QWidget):
         for day in data:
             column = blocker.date_to_value[day]
             for block in data[day].values():
-                for row in range(int(block[0][:2]), int(block[1][:2])):
-                    exec(f"self.tableWidget.item({row}, {column}).setBackground(QBrush(QColor(135, 206, 235)))")
+                hour_start = int(block[0][:2])
+                hour_end = int(block[1][:2])
+
+                min_start = int(block[0][3:4])
+                min_end = int(block[1][3:4])
+                print(block)
+                if min_start > 0:
+                    start_block = hour_start * 6 + min_start
+                else:
+                    start_block = hour_start * 6
+
+                if min_end > 0:
+                    end_block = hour_end * 6 + min_end
+                else:
+                    end_block = hour_end * 6
+
+                print(start_block, end_block)
+
+                for period in range(start_block, end_block):
+                    exec(f"self.tableWidget.item({period}, {column}).setBackground(QBrush(QColor(135, 206, 235)))")
+
 
 
     def update_time_tables(self):
@@ -682,7 +701,6 @@ windowPushButtonStyle = """
 
 """
 
-
 checkBoxStyle = """
     QCheckBox::indicator {
 	    width: 50px;
@@ -697,5 +715,3 @@ checkBoxStyle = """
 	    image: url("ui/iconUI/toggle-off-button.png");
     }
     """
-
-
