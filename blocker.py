@@ -9,11 +9,9 @@ import os
 def start_block():
     notification = notifypy.Notify()
     notification.title = "Application Blocked"
-
     while True:
         time.sleep(1)
         if should_block():
-            if os.system(f'tasklist | find "Taskmgr.exe"') == 0 and should_blockTaskManager(): os.system(f"taskkill /im taskmgr.exe /f")
             for item in blockerapplication.read_file():
                 if os.system(f'tasklist | find "{item.strip()}"') == 0:
                     os.system(f"taskkill /im {item.strip()} /f")
@@ -23,6 +21,8 @@ def start_block():
             time.sleep(2)
         else:
             time.sleep(5)
+
+
 
 
 
@@ -37,14 +37,24 @@ def should_block():
     if config['blocker']['block'] == 'on':
         return True
     elif config['blocker']['scheduledblock'] == 'on':
-        data = read_blocks()
-        user_day = datetime.today().strftime('%A')
-        time_now = datetime.now().strftime("%H:%M:%S")
-        for times in data[user_day].values():
-            start_time = times[0]
-            end_time = times[1]
-            if start_time < time_now and end_time > time_now:
-                return True
+        if should_scheduledblock(): return True
+    return False
+
+def should_scheduledblock():
+    data = read_blocks()
+    user_day = datetime.today().strftime('%A')
+    time_now = datetime.now().strftime("%H:%M:%S")
+    for times in data[user_day].values():
+        start_time = times[0]
+        end_time = times[1]
+        if start_time < time_now and end_time > time_now:
+            return True
+
+def should_lockscheduledblock():
+    config.read(config_file)
+
+    if config['blocker']['scheduledblock'] == 'on' and config['blocker']['lockscheduledblock'] == 'on':
+        return True
     return False
 
 def should_blockTaskManager():

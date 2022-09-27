@@ -3,7 +3,9 @@ import blocker
 import blockerwebsite
 import blockerapplication
 import localserver
+import time
 import sys
+import os
 import pystray
 import PIL.Image
 from PyQt5.uic import loadUi
@@ -22,6 +24,19 @@ class Worker2(QThread):
     def run(self):
         localserver.start()
 
+class Worker3(QThread):
+    lockSig = pyqtSignal()
+    unlockSig = pyqtSignal()
+    def run(self):
+        while True:
+            if blocker.should_block():
+                if os.system(f'tasklist | find "Taskmgr.exe"') == 0 and blocker.should_blockTaskManager():  os.system(f"taskkill /im taskmgr.exe /f")
+                time.sleep(2)
+                if blocker.should_lockscheduledblock():
+                    self.lockSig.emit()
+            else:
+                self.unlockSig.emit()
+                time.sleep(5)
 
 
 
@@ -39,12 +54,6 @@ class alertPopup(QDialog):
 
     def alert_accept(self):
         self.close()
-        self.worker1 = Worker1()
-        self.worker1.start()
-
-        self.worker2 = Worker2()
-        self.worker2.start()
-
         try:
             start_program()
         except:
@@ -177,6 +186,11 @@ class MainWindow(QMainWindow):
     _gripSize = 1.5
     def __init__(self):
         super().__init__()
+        self.worker1 = Worker1()
+        self.worker1.start()
+
+        self.worker2 = Worker2()
+        self.worker2.start()
         self.init_ui()
 
     def init_ui(self):
@@ -282,11 +296,19 @@ class MainWindow(QMainWindow):
 
 class HomeWidget(QWidget):
     def __init__(self):
+
         super().__init__()
+
         self.init_ui()
 
     def init_ui(self):
         loadUi("ui/home.ui", self)
+
+        # signals to disable/enable checkboxes
+        self.worker3 = Worker3()
+        self.worker3.lockSig.connect(self.disable_schedule_buttons)
+        self.worker3.unlockSig.connect(self.enable_schedule_buttons)
+        self.worker3.start()
 
         # setting styles
         self.startBlockCheckBox.setStyleSheet(checkBoxStyle)
@@ -299,6 +321,9 @@ class HomeWidget(QWidget):
         self.startScheduledBlockCheckBox.stateChanged.connect(self.change_scheduledblock)
         self.startLockScheduledBlock.stateChanged.connect(self.change_lockscheduledblock)
         self.startBlockTaskManager.stateChanged.connect(self.change_blocktaskmanager)
+
+
+
 
         # block button initalize
         initial_block = config['blocker']['block']
@@ -325,6 +350,7 @@ class HomeWidget(QWidget):
             self.startBlockTaskManager.setChecked(True)
         else:
             self.startBlockTaskManager.setChecked(False)
+
 
 
     def change_block(self):
@@ -372,9 +398,13 @@ class HomeWidget(QWidget):
         else:
             config['blocker']['blocktaskmanager'] = 'off'
 
-    def disable_schedule_button(self):
-        if not blocker.should_block() and config['blocker']['scheduledblock'] == 'off' and config['blocker']['lockscheduledblock'] == 'off':
-            pass
+    def disable_schedule_buttons(self):
+        self.startScheduledBlockCheckBox.setEnabled(False)
+        self.startLockScheduledBlock.setEnabled(False)
+
+    def enable_schedule_buttons(self):
+        self.startScheduledBlockCheckBox.setEnabled(True)
+        self.startLockScheduledBlock.setEnabled(True)
 
 
 
@@ -494,7 +524,6 @@ class ScheduleBlocksWidget(QWidget):
         self.btn_scheduleSaturday.clicked.connect(lambda: self.schedule_block("Saturday"))
         self.btn_scheduleSunday.clicked.connect(lambda: self.schedule_block("Sunday"))
 
-        self.tableWidget.setRowCount(144)
         self.tableWidget.setColumnCount(7)
         self.tableWidget.resizeRowsToContents()
         self.create_time_tables()
