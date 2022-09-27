@@ -1,15 +1,10 @@
 from main import config, config_file
-import blocker
-import blockerwebsite
-import blockerapplication
+import blocker, blockerwebsite, blockerapplication
 import localserver
-import time
-import sys
-import os
-import pystray
-import PIL.Image
-from PyQt5.uic import loadUi
+import time, sys, os
+import pystray, PIL.Image
 from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.uic import loadUi
 from PyQt5.QtGui import QBrush, QColor
 from PyQt5.QtWidgets import QDialog, QWidget, QApplication, QStackedWidget, QTableWidgetItem, QFileDialog, QTimeEdit, \
     QGroupBox, QFormLayout, QSizePolicy, QStyle, QMainWindow
@@ -25,17 +20,24 @@ class Worker2(QThread):
         localserver.start()
 
 class Worker3(QThread):
-    lockSig = pyqtSignal()
-    unlockSig = pyqtSignal()
+    lockScheduleSig = pyqtSignal()
+    unlockScheduleSig = pyqtSignal()
+
+    lockTaskManagerSig = pyqtSignal()
+    unlockTaskManagerSig = pyqtSignal()
     def run(self):
         while True:
             if blocker.should_block():
-                if os.system(f'tasklist | find "Taskmgr.exe"') == 0 and blocker.should_blockTaskManager():  os.system(f"taskkill /im taskmgr.exe /f")
+                if blocker.should_blockTaskManager():
+                    if os.system(f'tasklist | find "Taskmgr.exe"') == 0: os.system(f"taskkill /im taskmgr.exe /f")
+                    if blocker.should_lockTaskManager(): self.lockTaskManagerSig.emit()
+
+                if blocker.should_lockscheduledblock(): self.lockScheduleSig.emit()
+
                 time.sleep(2)
-                if blocker.should_lockscheduledblock():
-                    self.lockSig.emit()
             else:
-                self.unlockSig.emit()
+                self.unlockScheduleSig.emit()
+                self.unlockTaskManagerSig.emit()
                 time.sleep(5)
 
 
@@ -296,9 +298,7 @@ class MainWindow(QMainWindow):
 
 class HomeWidget(QWidget):
     def __init__(self):
-
         super().__init__()
-
         self.init_ui()
 
     def init_ui(self):
@@ -306,8 +306,10 @@ class HomeWidget(QWidget):
 
         # signals to disable/enable checkboxes
         self.worker3 = Worker3()
-        self.worker3.lockSig.connect(self.disable_schedule_buttons)
-        self.worker3.unlockSig.connect(self.enable_schedule_buttons)
+        self.worker3.lockScheduleSig.connect(self.disable_schedule_buttons)
+        self.worker3.unlockScheduleSig.connect(self.enable_schedule_buttons)
+        self.worker3.lockTaskManagerSig.connect(self.disable_taskmanager_buttons)
+        self.worker3.unlockTaskManagerSig.connect(self.enable_taskmanager_buttons)
         self.worker3.start()
 
         # setting styles
@@ -315,12 +317,14 @@ class HomeWidget(QWidget):
         self.startScheduledBlockCheckBox.setStyleSheet(checkBoxStyle)
         self.startLockScheduledBlock.setStyleSheet(checkBoxStyle)
         self.startBlockTaskManager.setStyleSheet(checkBoxStyle)
+        self.startLockTaskManagerBlock.setStyleSheet(checkBoxStyle)
 
         # buttons
         self.startBlockCheckBox.stateChanged.connect(self.change_block)
         self.startScheduledBlockCheckBox.stateChanged.connect(self.change_scheduledblock)
         self.startLockScheduledBlock.stateChanged.connect(self.change_lockscheduledblock)
         self.startBlockTaskManager.stateChanged.connect(self.change_blocktaskmanager)
+        self.startLockTaskManagerBlock.stateChanged.connect(self.change_locktaskmanager)
 
 
 
@@ -330,6 +334,7 @@ class HomeWidget(QWidget):
         initial_scheduledBlock = config['blocker']['scheduledblock']
         initial_lockScheduledBlock = config['blocker']['lockscheduledblock']
         initial_blockTaskManager = config['blocker']['blocktaskmanager']
+        initial_lockTaskManager = config['blocker']['locktaskmanager']
 
         if initial_block == "on":
             self.startBlockCheckBox.setChecked(True)
@@ -350,6 +355,11 @@ class HomeWidget(QWidget):
             self.startBlockTaskManager.setChecked(True)
         else:
             self.startBlockTaskManager.setChecked(False)
+
+        if initial_lockTaskManager == "on":
+            self.startLockTaskManagerBlock.setChecked(True)
+        else:
+            self.startLockTaskManagerBlock.setChecked(False)
 
 
 
@@ -373,6 +383,10 @@ class HomeWidget(QWidget):
         with open(config_file, 'w') as write_config:
             config.write(write_config)
 
+    def change_locktaskmanager(self):
+        self.update_locktaskmanager_button()
+        with open(config_file, 'w') as write_config:
+            config.write(write_config)
 
     def update_block_button(self):
         if self.startBlockCheckBox.isChecked():
@@ -398,13 +412,40 @@ class HomeWidget(QWidget):
         else:
             config['blocker']['blocktaskmanager'] = 'off'
 
+    def update_locktaskmanager_button(self):
+        if self.startLockTaskManagerBlock.isChecked():
+            config['blocker']['locktaskmanager'] = 'on'
+        else:
+            config['blocker']['locktaskmanager'] = 'off'
+
     def disable_schedule_buttons(self):
+        self.startScheduledBlockCheckBox.setStyleSheet(lockedCheckBoxStyle)
         self.startScheduledBlockCheckBox.setEnabled(False)
+
+        self.startLockScheduledBlock.setStyleSheet(lockedCheckBoxStyle)
         self.startLockScheduledBlock.setEnabled(False)
 
     def enable_schedule_buttons(self):
+        self.startScheduledBlockCheckBox.setStyleSheet(checkBoxStyle)
         self.startScheduledBlockCheckBox.setEnabled(True)
+
+        self.startLockScheduledBlock.setStyleSheet(checkBoxStyle)
         self.startLockScheduledBlock.setEnabled(True)
+
+    def disable_taskmanager_buttons(self):
+        self.startBlockTaskManager.setStyleSheet(lockedCheckBoxStyle)
+        self.startBlockTaskManager.setEnabled(False)
+
+        self.startLockTaskManagerBlock.setStyleSheet(lockedCheckBoxStyle)
+        self.startLockTaskManagerBlock.setEnabled(False)
+
+    def enable_taskmanager_buttons(self):
+        self.startBlockTaskManager.setStyleSheet(checkBoxStyle)
+        self.startBlockTaskManager.setEnabled(True)
+
+        self.startLockTaskManagerBlock.setStyleSheet(checkBoxStyle)
+        self.startLockTaskManagerBlock.setEnabled(True)
+
 
 
 
@@ -743,4 +784,17 @@ checkBoxStyle = """
     QCheckBox::indicator::unchecked {
 	    image: url("ui/iconUI/toggle-off-button.png");
     }
+    """
+
+lockedCheckBoxStyle = """
+    QCheckBox::indicator {
+	    width: 50px;
+	    height: 50px;
+    }
+
+    QCheckBox::indicator::checked {
+	    image: url("ui/iconUI/toggle-on-button-grey.png");
+    }
+
+
     """

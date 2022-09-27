@@ -64,6 +64,13 @@ def should_blockTaskManager():
         return True
     return False
 
+def should_lockTaskManager():
+    config.read(config_file)
+
+    if config['blocker']['locktaskmanager'] == 'on':
+        return True
+    return False
+
 
 def add_block(day, items):
     data = read_blocks()
