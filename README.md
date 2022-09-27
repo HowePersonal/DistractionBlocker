@@ -13,3 +13,6 @@ Added scheduling feature to allow users to create periods of time in which the b
 
 UPDATE 9/10/2022:
 Refactored full Qt GUI by using one single window as the UI, created custom title bar for better style and frames to allow for resizing
+
+UPDATE 9/20/2022:
+Implemented proper scheduling display blocks, allowing program to correctly visualize periods scheduled to be blocked by users
