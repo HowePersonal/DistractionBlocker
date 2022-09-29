@@ -625,9 +625,10 @@ class ScheduleBlocksWidget(QWidget):
         self.color_time_tables()
 
     def schedule_block(self, day):
-        self.schedule_block_popup = ScheduleBlocksPopupWindow(day)
-        self.schedule_block_popup.sig.connect(self.update_time_tables)
-        self.schedule_block_popup.show()
+        if not blocker.should_block() and not blocker.should_lockscheduledblock():
+            self.schedule_block_popup = ScheduleBlocksPopupWindow(day)
+            self.schedule_block_popup.sig.connect(self.update_time_tables)
+            self.schedule_block_popup.show()
 
 
 
