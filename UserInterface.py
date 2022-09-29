@@ -494,7 +494,7 @@ class BlockedSitesWidget(QWidget):
         self.blockSiteTextBox.clear()
 
     def remove_item(self):
-        if self.tableWidget.currentRow() != -1 and self.tableWidget.rowCount() > 0:
+        if not blocker.should_block() and self.tableWidget.currentRow() != -1 and self.tableWidget.rowCount() > 0:
             hostname = self.tableWidget.item(self.tableWidget.currentRow(), 0).text()
             blockerwebsite.delete_block(hostname)
             self.tableWidget.removeRow(self.tableWidget.currentRow())
@@ -540,7 +540,7 @@ class BlockedAppsWidget(QWidget):
             blockerapplication.add_block(appname)
 
     def remove_item(self):
-        if self.tableWidget.currentRow() != -1 and self.tableWidget.rowCount() > 0:
+        if not blocker.should_block() and self.tableWidget.currentRow() != -1 and self.tableWidget.rowCount() > 0:
             appname = self.tableWidget.item(self.tableWidget.currentRow(), 0).text()
             blockerapplication.delete_block(appname)
             self.tableWidget.removeRow(self.tableWidget.currentRow())
@@ -625,7 +625,7 @@ class ScheduleBlocksWidget(QWidget):
         self.color_time_tables()
 
     def schedule_block(self, day):
-        if not blocker.should_block() and not blocker.should_lockscheduledblock():
+        if not blocker.should_block():
             self.schedule_block_popup = ScheduleBlocksPopupWindow(day)
             self.schedule_block_popup.sig.connect(self.update_time_tables)
             self.schedule_block_popup.show()
