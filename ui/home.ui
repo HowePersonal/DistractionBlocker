@@ -63,7 +63,7 @@ QTabBar::tab:selected {
 }</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="usesScrollButtons">
       <bool>false</bool>
@@ -343,7 +343,7 @@ font: 17px 10pt &quot;MS Shell Dlg 2&quot;;</string>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>43</width>
+                 <width>47</width>
                  <height>20</height>
                 </size>
                </property>
@@ -395,7 +395,7 @@ font: 17px 10pt &quot;MS Shell Dlg 2&quot;;</string>
 font: 17px 10pt &quot;MS Shell Dlg 2&quot;;</string>
                </property>
                <property name="text">
-                <string>Block Task Manager</string>
+                <string>Lock Task Manager</string>
                </property>
               </widget>
              </item>
@@ -409,14 +409,14 @@ font: 17px 10pt &quot;MS Shell Dlg 2&quot;;</string>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>52</width>
+                 <width>62</width>
                  <height>20</height>
                 </size>
                </property>
               </spacer>
              </item>
              <item>
-              <widget class="QCheckBox" name="startBlockTaskManager">
+              <widget class="QCheckBox" name="startLockTaskManager">
                <property name="styleSheet">
                 <string notr="true">QCheckBox::indicator {
 	width: 50px;
@@ -461,7 +461,7 @@ font: 17px 10pt &quot;MS Shell Dlg 2&quot;;</string>
 font: 17px 10pt &quot;MS Shell Dlg 2&quot;;</string>
                </property>
                <property name="text">
-                <string>Lock Task Manager Block</string>
+                <string>Lock Date &amp; Time Setting</string>
                </property>
               </widget>
              </item>
@@ -482,7 +482,7 @@ font: 17px 10pt &quot;MS Shell Dlg 2&quot;;</string>
               </spacer>
              </item>
              <item>
-              <widget class="QCheckBox" name="startLockTaskManagerBlock">
+              <widget class="QCheckBox" name="startLockDateAndTime">
                <property name="styleSheet">
                 <string notr="true">QCheckBox::indicator {
 	width: 50px;

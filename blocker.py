@@ -57,13 +57,6 @@ def should_lockscheduledblock():
         return True
     return False
 
-def should_blockTaskManager():
-    config.read(config_file)
-
-    if config['blocker']['blocktaskmanager'] == 'on':
-        return True
-    return False
-
 def should_lockTaskManager():
     config.read(config_file)
 

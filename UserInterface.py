@@ -28,9 +28,9 @@ class Worker3(QThread):
     def run(self):
         while True:
             if blocker.should_block():
-                if blocker.should_blockTaskManager():
+                if blocker.should_lockTaskManager():
                     if os.system(f'tasklist | find "Taskmgr.exe"') == 0: os.system(f"taskkill /im taskmgr.exe /f")
-                    if blocker.should_lockTaskManager(): self.lockTaskManagerSig.emit()
+                    self.lockTaskManagerSig.emit()
 
                 if blocker.should_lockscheduledblock(): self.lockScheduleSig.emit()
 
@@ -316,16 +316,13 @@ class HomeWidget(QWidget):
         self.startBlockCheckBox.setStyleSheet(checkBoxStyle)
         self.startScheduledBlockCheckBox.setStyleSheet(checkBoxStyle)
         self.startLockScheduledBlock.setStyleSheet(checkBoxStyle)
-        self.startBlockTaskManager.setStyleSheet(checkBoxStyle)
-        self.startLockTaskManagerBlock.setStyleSheet(checkBoxStyle)
+        self.startLockTaskManager.setStyleSheet(checkBoxStyle)
 
         # buttons
         self.startBlockCheckBox.stateChanged.connect(self.change_block)
         self.startScheduledBlockCheckBox.stateChanged.connect(self.change_scheduledblock)
         self.startLockScheduledBlock.stateChanged.connect(self.change_lockscheduledblock)
-        self.startBlockTaskManager.stateChanged.connect(self.change_blocktaskmanager)
-        self.startLockTaskManagerBlock.stateChanged.connect(self.change_locktaskmanager)
-
+        self.startLockTaskManager.stateChanged.connect(self.change_locktaskmanager)
 
 
 
@@ -333,7 +330,6 @@ class HomeWidget(QWidget):
         initial_block = config['blocker']['block']
         initial_scheduledBlock = config['blocker']['scheduledblock']
         initial_lockScheduledBlock = config['blocker']['lockscheduledblock']
-        initial_blockTaskManager = config['blocker']['blocktaskmanager']
         initial_lockTaskManager = config['blocker']['locktaskmanager']
 
         if initial_block == "on":
@@ -351,15 +347,10 @@ class HomeWidget(QWidget):
         else:
             self.startLockScheduledBlock.setChecked(False)
 
-        if initial_blockTaskManager == "on":
-            self.startBlockTaskManager.setChecked(True)
-        else:
-            self.startBlockTaskManager.setChecked(False)
-
         if initial_lockTaskManager == "on":
-            self.startLockTaskManagerBlock.setChecked(True)
+            self.startLockTaskManager.setChecked(True)
         else:
-            self.startLockTaskManagerBlock.setChecked(False)
+            self.startLockTaskManager.setChecked(False)
 
 
 
@@ -375,11 +366,6 @@ class HomeWidget(QWidget):
 
     def change_lockscheduledblock(self):
         self.update_lockscheduledblock_button()
-        with open(config_file, 'w') as write_config:
-            config.write(write_config)
-
-    def change_blocktaskmanager(self):
-        self.update_blocktaskmanager_button()
         with open(config_file, 'w') as write_config:
             config.write(write_config)
 
@@ -401,19 +387,13 @@ class HomeWidget(QWidget):
             config['blocker']['scheduledblock'] = 'off'
 
     def update_lockscheduledblock_button(self):
-        if self.startLockScheduledBlock.isChecked():
+        if self.startLockTaskManager.isChecked():
             config['blocker']['lockscheduledblock'] = 'on'
         else:
             config['blocker']['lockscheduledblock'] = 'off'
 
-    def update_blocktaskmanager_button(self):
-        if self.startBlockTaskManager.isChecked():
-            config['blocker']['blocktaskmanager'] = 'on'
-        else:
-            config['blocker']['blocktaskmanager'] = 'off'
-
     def update_locktaskmanager_button(self):
-        if self.startLockTaskManagerBlock.isChecked():
+        if self.startLockTaskManager.isChecked():
             config['blocker']['locktaskmanager'] = 'on'
         else:
             config['blocker']['locktaskmanager'] = 'off'
@@ -433,18 +413,12 @@ class HomeWidget(QWidget):
         self.startLockScheduledBlock.setEnabled(True)
 
     def disable_taskmanager_buttons(self):
-        self.startBlockTaskManager.setStyleSheet(lockedCheckBoxStyle)
-        self.startBlockTaskManager.setEnabled(False)
-
-        self.startLockTaskManagerBlock.setStyleSheet(lockedCheckBoxStyle)
-        self.startLockTaskManagerBlock.setEnabled(False)
+        self.startLockTaskManager.setStyleSheet(lockedCheckBoxStyle)
+        self.startLockTaskManager.setEnabled(False)
 
     def enable_taskmanager_buttons(self):
-        self.startBlockTaskManager.setStyleSheet(checkBoxStyle)
-        self.startBlockTaskManager.setEnabled(True)
-
-        self.startLockTaskManagerBlock.setStyleSheet(checkBoxStyle)
-        self.startLockTaskManagerBlock.setEnabled(True)
+        self.startLockTaskManager.setStyleSheet(checkBoxStyle)
+        self.startLockTaskManager.setEnabled(True)
 
 
 

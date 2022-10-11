@@ -1,6 +1,6 @@
 from main import config, config_file
 from flask import Flask
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from waitress import serve
 import blockerwebsite
 
